@@ -1,0 +1,266 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css"/>
+		<style type="text/css">
+			@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+			body{
+				background: #fff;
+				height: 100%;
+				width: 100%;
+			}
+			#content-view
+			{
+				min-height: 100%;
+				max-height: 100%;
+			}
+			.header
+			{
+				background:#fff;
+				padding: 1%;
+				font-family: 'Open Sans';
+			}
+			.col-md-12,.col-md-3,.col-md-9
+			{
+				padding-left: 0px;
+				padding-right: 0px;
+				padding: 2px;
+			}
+			.btn
+			{
+				transition:all 0.7s ease-in;			
+				border-radius: 0px;
+			}
+			.btn-warning
+			{
+				color: #fff;
+				background: #f1c40f;
+				font-family: 'Open Sans';
+				font-size: 15px;
+				border:none;
+				padding-bottom: 7px;
+			}
+			.btn-warning:hover
+			{
+				background: #f1c40f;
+			}
+		
+			.panel,.panel-primary,.panel-heading,.table{
+				border-radius: 0px;
+				font-family: 'Open Sans';
+				font-size: 12px;
+			}
+			.panel-heading{
+				font-size: 14px;
+			}
+			.log-panel
+			{
+				max-height: 98%; 
+				transition:all 1s ease-in;
+			}
+			.panel{
+			}
+			.panel-table
+			{
+				max-height: 65%;
+				overflow-y: auto;
+			}
+			
+			.name-det > td
+			{
+				text-align: center;
+			}
+			#style-1::-webkit-scrollbar-track
+			{
+				-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+				background-color: #F5F5F5;
+			}
+
+			#style-1::-webkit-scrollbar
+			{
+				width: 5px;
+				background-color: #F5F5F5;
+			}
+
+			#style-1::-webkit-scrollbar-thumb
+			{	
+				-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+				background-color: #555;
+			}
+			.chart-padding
+			{
+				padding: 10px;
+			}
+		</style>
+	</head>	
+	<body>
+		<!-- Body Start -->
+		<div class="col-md-12">
+			
+			
+			<section id="content-view col-md-12">
+				<div class="col-md-3 log-panel">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Log</div>
+					<div class="row chart-padding">
+						<div class="col-md-1"></div>
+						<div class="chart">
+							<canvas id="canvas"></canvas>
+						</div>
+					</div>
+					<div class="panel-table" id="style-1">
+					<table class="table">
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						<tr class="name-det">
+							<td>Pranav Raj S</td>
+							<td class="btn-success">51%</td>
+							<td class="btn-danger">51</td>
+							<td>Main Hall</td>
+						</tr>
+						
+					</table>
+					</div>
+				</div>
+				</div>
+				<div class="col-md-9 log-panel">
+					<div class="panel panel-primary">
+						<div class="panel-heading">Visitors</div>
+				
+					</div>
+				</div>
+
+			</section>
+			
+			<div class="footer col-md-12">
+			
+			</div>
+			
+		</div>
+	</body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/chart.js"></script>
+	<script type="text/javascript">
+	var lineChartData = {
+			labels : ["Jan","Feb","Mar","Apr","May","June","July"],
+			datasets : [
+				{
+					fillColor : "rgba(220,220,220,0.5)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					data : [65,59,90,81,56,55,40]
+				},
+				{
+					fillColor : "rgba(151,187,205,0.5)",
+					strokeColor : "rgba(151,187,205,1)",
+					pointColor : "rgba(151,187,205,1)",
+					pointStrokeColor : "#fff",
+					data : [28,48,40,19,96,27,100]
+				}
+			]
+			
+		}
+	var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData);
+	</script>	
+</html>

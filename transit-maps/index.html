@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+    <head>
+        <title>Trivandrum Transit Map</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+        <link href="static/css/reset.css" rel="stylesheet" type="text/css" />
+        <link href="static/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="static/css/bootstrap/bootstrap.css" rel="stylesheet" type="text/css" />
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script src="http://maps.googleapis.com/maps/api/js?v=3.13&amp;sensor=false&amp;libraries=geometry"></script>
+        <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.2.1"></script>
+        
+        <script src="static/js/infobox_packed.js"></script>
+        <script src="static/js/map.js"></script>
+        <style type="text/css">
+        @import url(http://fonts.googleapis.com/css?family=Droid+Sans);
+        .header
+        {
+            font-family: 'Droid Sans', sans-serif;
+            
+            height:7%;
+            z-index: 1;
+            -webkit-box-shadow: 0px 3px 2px 0px rgba(50, 50, 50, 0.15);
+            -moz-box-shadow:    0px 3px 2px 0px rgba(50, 50, 50, 0.15);
+            box-shadow:         0px 3px 2px 0px rgba(50, 50, 50, 0.15);
+        }
+        .header h3
+        {
+            font-weight: bold;
+            font-size: 18px;
+            padding: 0px;
+            margin: 0px;
+            margin-top: 13px
+        }
+        #map_canvas
+        {
+            height: 88%;
+        }
+        .footer
+        {
+            z-index: 10;
+            height: 5%;
+            -webkit-box-shadow: 0px -7px 2px 0px rgba(50, 50, 50, 0.15);
+            -moz-box-shadow:    0px -7px 2px 0px rgba(50, 50, 50, 0.15);
+            box-shadow:         0px -7px 2px 0px rgba(50, 50, 50, 0.15);      
+        }
+        .btn
+        {
+            border-radius: 0px;
+            padding: 5px;
+        }
+        .panel-heading
+        {
+            border-radius: 0px;
+        }
+        .panel,.panel-primary
+        {
+            font-family: 'Droid Sans', sans-serif;
+            border-radius: 0px;
+            padding: 0px;
+        }
+        .address
+        {
+            font-family: 'Droid Sans';
+            padding-top: 8px;
+            font-size: 12px;
+        }
+        .footer ul
+        {
+            font-family: 'Droid Sans';
+            font-size: 13px;
+        }
+        .footer ul li
+        {
+            float: left;
+            font-size: underline;
+        }
+            </style>
+    </head>
+    <body>
+        <div class="col-md-12 header">
+            <h3>REALTIME TRACKING SYSTEM - TRIVANDRUM</h3>
+        </div>
+        <div id="map_canvas" class="col-md-12"></div>
+        <div id="panel" class="panel panel-primary col-md-3 hidden">
+            <div class="panel-heading">Dashboard</div>
+            <div class="section panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>Time:</b> <span id="day_time"></span> 
+                    </div>
+                    <div class="col-md-6">
+                        <select id="time_multiply">
+                            <option value="1" selected="selected">1x</option>
+                            <option value="5">5x</option>
+                            <option value="10">10x</option>
+                            <option value="100">100x</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-1">
+                                <input type="button" id="geolocation_click"/>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="user_location" value="Enter your location" / >
+                            </div>
+                        </div>
+                    </div>
+               </div>
+            <div id="vehicle_info" class="hidden section panel-table" data-type="panel">
+                <div class="col-md-12">
+                    <b>Vehicle:</b> <span class="vehicle_name"></span> <input type="button" class="panel_collapsible expanded" />
+                </div>
+                <div class="">
+                    <div>
+                        <input id="follow_trigger" class="btn btn-primary" value="Follow" data-value-toggle="STOP" />
+                        <input id="route_show_trigger" type="button" value="Draw route" data-value-toggle="HIDE route" />
+                    </div>
+
+                    <div id="vehicle_timetable_container">
+                        <table id="vehicle_timetable" class="panel_table">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td class="station">Station</td>
+                                    <td>Arr.</td>
+                                    <td>Dep.</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="station_info" class="hidden section" data-type="panel">
+                <div>
+                    <b>Station:</b> <span class="station_name"></span> <input type="button" class="panel_collapsible expanded" />
+                </div>
+                <div class="panel_content">
+                    <table id="station_departures" class="panel_table">
+                        <thead>
+                            <tr>
+                                <td>#</td>
+                                <td class="wide">Vehicle</td>
+                                <td>To</td>
+                                <td>Dep.</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="vehicle_popup_container" class="hidden">
+            <div id="vehicle_popup">
+                <span class="vehicle_name"></span>
+                <br />
+                <p class="status"></p>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="col-md-12">
+                <div class="col-md-6 address"> 
+                    Drishya Building, Technopark Campus, Kazhakkoottam, Kerala 695581
+                </div>
+                <div class="col-md-6"> 
+                    <ul>
+                        <li>Contact Us</li>
+                        <li>Disclaimer</li>
+                    </ul>   
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
