@@ -9,7 +9,7 @@
       }
       #container {
         background-color: black;
-        background-image: url("ey.png");
+        background-image: url("ey2.png");
         background-position: 1px 0px;
         background-repeat: no-repeat;
         width: 580px;
@@ -17,16 +17,16 @@
         float:left; 
       }
       #container2 {
-        background-color: red;
+        background-color: gray;
         background-position: 1px 0px;
         background-repeat: no-repeat;
         width: 580px;
         height: 327px;
-        float:right; 
+        float: right;
       }
       #topcontainer
       {
-          background-color: yellow;
+        background-color: yellow;
         background-repeat: no-repeat;
         width: 100%;
         height: 327px;
@@ -35,7 +35,7 @@
   </head>
   <body>
    
-    <div id="container"></div><div id="container2"></div>
+    <div id="container"></div><canvas id="container2"></canvas>
    
  
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.1.min.js"></script>
@@ -44,15 +44,15 @@
         return {
           '1st Floor': {
             color: 'blue',
-            points: [  44,179,43,158, 415,235, 529,204, 528,232, 414,269]
+            points: [49,197,49,179, 378,246, 526,210, 524,235, 377,277]
           },
           '2nd Floor': {
             color: 'red',
-            points: [415,235,529,204,528,173,415,199,41,138,44,158]
+            points: [49,179,47,162,380,216,528,185,526,208,378,246]
           },
           '3rd Floor': {
             color: 'yellow',
-            points: [415,199,528,173,530,143,416,166,41,117,41,138]
+            points: [47,162,46,143,382,181,530,159,528,183,380,214]
           }
         }
       }
@@ -61,6 +61,8 @@
         tooltip.position({x:x, y:y});
         tooltip.show();
       }
+
+
       var stage = new Kinetic.Stage({
         container: 'container',
         width: 578,
@@ -157,12 +159,21 @@
         var shape = evt.targetNode;
         if (shape) {
           console.log("clicked" + shape.getAttr('key'));
+          var can = document.getElementById('container2');
+          var ctx = can.getContext('2d');
+          var img = new Image();
+          img.onload = function(){
+              can.width = img.width;
+              can.height = img.height;
+              ctx.drawImage(img, 0, 0, img.width, img.height);
+          }
+
           if(shape.getAttr('key')=="1st Floor")
-                document.getElementById("container2").style.backgroundImage = "url('base.png')";
+                img.src="base.png"
           else if(shape.getAttr('key')=="2nd Floor")
-                document.getElementById("container2").style.backgroundImage = "url('gf.png')";
+                img.src="gf.png"
           else if(shape.getAttr('key')=="3rd Floor")
-                document.getElementById("container2").style.backgroundImage = "url('ff.png')";
+                img.src="ff.png";
           
           else
              document.getElementById("container2").style.backgroundImage = "";
