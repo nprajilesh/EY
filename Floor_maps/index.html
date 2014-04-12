@@ -59,114 +59,121 @@
        function getDatatop() {
         return {
         'Zone 1': {
-            color: 'blue',
+            id : 301,
+            color: 'ivory',
             points: [3,10,3,320,28,320,28,10]
           },
           'Zone 2': {
-            color: 'red',
+            id : 302,
+            color: 'ivory',
             points: [28,10,28,32,550,32,550,10]
           },
           'zone 3': {
-            color: 'yellow',
+            id : 303,
+            color: 'ivory',
             points: [550,10,550,32,550,320,577,320,577,10]
           },
           'zone 4': {
-            color: 'green',
+            id : 304,
+            color: 'ivory',
             points: [550,320,550,200,457,200,457,320]
           },
           'zone 5': {
-            color: 'orange',
+            id : 305,
+            color: 'ivory',
             points: [550,200,457,200,457,138,398,138,398,32,550,32]
          },
           'zone 6': {
-            color: 'violet',
+            id : 306,
+            color: 'ivory',
             points: [ 398,138,398,32,182,32,182,138]
        },
           'zone 7': {
+            id : 307,
             color: 'ivory',
             points: [ 182,32,182,138,123,138,123,199,28,199,28,32]
           },
           'zone 8': {
-            color: 'brown',
+            id : 308,
+            color: 'ivory',
             points: [ 123,199,28,199,28,320,123,320]
         },
           'zone 9': {
-            color: 'indigo',
+            id : 309,
+            color: 'ivory',
             points: [ 123,320,123,138,457,138,457,320,428,320,428,165,150,165,150,320]
         },
           'zone 10': {
-            color: 'pink',
+            id : 310,
+            color: 'ivory',
             points: [ 428,320,428,165,150,165,150,320,215,320,215,184,365,185,365,320]
         }
 
         }
       }
 
-<<<<<<< HEAD
-      function getData3() {
-=======
 
        //cordinates of second floor zones
 
         function getDatamiddle() {
->>>>>>> 8828cb2965099ed6682bac3ba37f26e76dc52e3b
         return {
           'Zone 1': {
-            color: 'blue',
+            id : 201,
+            color: '#00FF99',
             points: [2,2,2,143,120,143,120,2]
           },
           'Zone 2': {
-            color: '00FFFF',
+            id : 202,
+            color: '#00FF99',
             points: [  120,143,2,143,2,313,120,313]
           },
           'zone 3': {
-            color: 'yellow',
+            id : 203,
+            color: '#00FF99',
             points: [214,2,120,2,120,125,214,125]
           },
           'zone 4': {
-            color: 'green',
+            id : 204,
+            color: '#00FF99',
             points: [  120,125,214,125,214,157,428,157,428,313,363,313,363,177,214,177,214,313,120,313]
           },
           'zone 5': {
-            color: 'orange',
-<<<<<<< HEAD
-            points: [ 214,2,214,157,363,157,363,99,428,99,428,2]
-=======
+            id : 205,
+            color: '#00FF99',
             points: [ 214,2,214,157,363,157,363,99,428,99,428,2
 ]
->>>>>>> 8828cb2965099ed6682bac3ba37f26e76dc52e3b
          },
           'zone 6': {
-            color: 'violet',
+            id : 206,
+            color: '#00FF99',
             points: [ 363,99,428,99,428,2,575,2,575,157,363,157]
        },
           'zone 7': {
-            color: 'ivory',
+            id : 207,
+            color: '#00FF99',
             points: [428,157,428,313,575,313,575,222,440,222,440,157]
           },
           'zone 8': {
-            color: 'brown',
+            id : 208,
+            color: '#00FF99',
             points: [  440,157,575,157,575,222,440,222]
         },
           'zone 9': {
-            color: 'red',
+            id : 209,
+            color: '#00FF99',
             points: [  363,313,363,177,214,177,214,313]
         }
       }
     }
-<<<<<<< HEAD
-       //cordinates of second floor zones
-=======
->>>>>>> 8828cb2965099ed6682bac3ba37f26e76dc52e3b
 
-      
        //cordinates of Third floor zones
 
       function getDatabottom() {
         return {
          '1scct': {
-            color: 'yellow',
-            points: [300,30,330,30,330,130,300,130]
+            id : '101',
+            color: '#99CCFF',
+            points: [300,30,430,30,430,130,300,130]
           }
           
         }
@@ -257,7 +264,6 @@
 
         var area = areas[key];
         var points = area.points;
-
         var shape = new Kinetic.Line({
           points: points,
           fill: area.color,
@@ -311,23 +317,9 @@
        function updatepoints()
        {
 
-            //container2.removeChildren();
+          
              var areas2;
              shapesLayer2.destroyChildren();
-<<<<<<< HEAD
-             //shapesLayer2.draw();
-             
-             tooltipLayer2.remove();
-           //  tooltipLayer2.draw();
-          
-           if(curr_floor=="Basement")
-                 areas2 = getData4();
-           else if(curr_floor=="Ground Floor")
-                 areas2 = getData3();
-           else if(curr_floor=="First Floor")
-                 areas2 = getData2();
-=======
-             console.log("sfsfs");
             tooltipLayer2.remove();
            
           
@@ -337,7 +329,6 @@
                  areas2 = getDatamiddle();
            else if(curr_floor=="First Floor")
                  areas2 = getDatatop();
->>>>>>> 8828cb2965099ed6682bac3ba37f26e76dc52e3b
            
 
           //draw area of selected floor
@@ -351,8 +342,9 @@
                           points: points,
                           fill: area.color,
                           opacity: 0,
-                          
+                          // custom attr
                           key: key,
+                          id: area.id,
                           closed: true
                       
                          });
@@ -442,11 +434,7 @@
                   var mousePos = stage2.getPointerPosition();
                   var x = mousePos.x;
                   var y = mousePos.y - 5;
-<<<<<<< HEAD
-                  updateTooltip2(tooltip2, x, y, shape.getAttr('key'));
-=======
                    updateTooltip2(tooltip2, x, y, shape.getAttr('key'));
->>>>>>> 8828cb2965099ed6682bac3ba37f26e76dc52e3b
                   tooltipLayer2.batchDraw();
                  
             }
@@ -482,9 +470,23 @@
               else if(shape.getAttr('key')=="First Floor")
                     document.getElementById("container2").style.backgroundImage = "url('top.png')";
               else
-                    document.getElementById("container2").style.backgroundImage = "";
+                     document.getElementById("container2").style.backgroundImage = "";
         }
 
+      });
+
+      //onclick function for container 2
+
+
+     stage2.on('click', function(evt)
+      {
+
+           var shape = evt.targetNode;
+           if (shape) 
+           {
+               var zone_id=shape.getAttr('id');
+               console.log(zone_id);
+           }
       });
 
     </script>
