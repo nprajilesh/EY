@@ -56,7 +56,7 @@
       var curr_floor=" ";
 
       //cordinates of first floor zones
-       function getData2() {
+       function getDatatop() {
         return {
         'Zone 1': {
             color: 'blue',
@@ -102,7 +102,14 @@
         }
       }
 
+<<<<<<< HEAD
       function getData3() {
+=======
+
+       //cordinates of second floor zones
+
+        function getDatamiddle() {
+>>>>>>> 8828cb2965099ed6682bac3ba37f26e76dc52e3b
         return {
           'Zone 1': {
             color: 'blue',
@@ -122,7 +129,12 @@
           },
           'zone 5': {
             color: 'orange',
+<<<<<<< HEAD
             points: [ 214,2,214,157,363,157,363,99,428,99,428,2]
+=======
+            points: [ 214,2,214,157,363,157,363,99,428,99,428,2
+]
+>>>>>>> 8828cb2965099ed6682bac3ba37f26e76dc52e3b
          },
           'zone 6': {
             color: 'violet',
@@ -142,12 +154,15 @@
         }
       }
     }
+<<<<<<< HEAD
        //cordinates of second floor zones
+=======
+>>>>>>> 8828cb2965099ed6682bac3ba37f26e76dc52e3b
 
       
        //cordinates of Third floor zones
 
-      function getData4() {
+      function getDatabottom() {
         return {
          '1scct': {
             color: 'yellow',
@@ -299,6 +314,7 @@
             //container2.removeChildren();
              var areas2;
              shapesLayer2.destroyChildren();
+<<<<<<< HEAD
              //shapesLayer2.draw();
              
              tooltipLayer2.remove();
@@ -310,6 +326,18 @@
                  areas2 = getData3();
            else if(curr_floor=="First Floor")
                  areas2 = getData2();
+=======
+             console.log("sfsfs");
+            tooltipLayer2.remove();
+           
+          
+           if(curr_floor=="Basement")
+                 areas2 = getDatabottom();
+           else if(curr_floor=="Ground Floor")
+                 areas2 = getDatamiddle();
+           else if(curr_floor=="First Floor")
+                 areas2 = getDatatop();
+>>>>>>> 8828cb2965099ed6682bac3ba37f26e76dc52e3b
            
 
           //draw area of selected floor
@@ -414,7 +442,11 @@
                   var mousePos = stage2.getPointerPosition();
                   var x = mousePos.x;
                   var y = mousePos.y - 5;
+<<<<<<< HEAD
                   updateTooltip2(tooltip2, x, y, shape.getAttr('key'));
+=======
+                   updateTooltip2(tooltip2, x, y, shape.getAttr('key'));
+>>>>>>> 8828cb2965099ed6682bac3ba37f26e76dc52e3b
                   tooltipLayer2.batchDraw();
                  
             }
