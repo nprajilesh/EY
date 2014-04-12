@@ -24,18 +24,12 @@
         height: 327px;
         float: right;
       }
-      #topcontainer
-      {
-        background-color: yellow;
-        background-repeat: no-repeat;
-        width: 100%;
-        height: 327px;
-      }
+    
     </style>
   </head>
   <body>
    
-    <div id="container"></div><canvas id="container2"></canvas>
+    <div id="container"></div><div id="container2"></div>
    
  
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.1.min.js"></script>
@@ -56,27 +50,138 @@
           }
         }
       }
+
+     
+      //indiactes currently selected floor
+      var curr_floor=" ";
+
+      //cordinates of first floor zones
+       function getData2() {
+        return {
+        'Zone 1': {
+            color: 'blue',
+            points: [3,10,3,320,28,320,28,10]
+          },
+          'Zone 2': {
+            color: 'red',
+            points: [28,10,28,32,550,32,550,10]
+          },
+          'zone 3': {
+            color: 'yellow',
+            points: [550,10,550,32,550,320,577,320,577,10]
+          },
+          'zone 4': {
+            color: 'green',
+            points: [550,320,550,200,457,200,457,320]
+          },
+          'zone 5': {
+            color: 'orange',
+            points: [550,200,457,200,457,138,398,138,398,32,550,32]
+         },
+          'zone 6': {
+            color: 'violet',
+            points: [ 398,138,398,32,182,32,182,138]
+       },
+          'zone 7': {
+            color: 'ivory',
+            points: [ 182,32,182,138,123,138,123,199,28,199,28,32]
+          },
+          'zone 8': {
+            color: 'brown',
+            points: [ 123,199,28,199,28,320,123,320]
+        },
+          'zone 9': {
+            color: 'indigo',
+            points: [ 123,320,123,138,457,138,457,320,428,320,428,165,150,165,150,320]
+        },
+          'zone 10': {
+            color: 'pink',
+            points: [ 428,320,428,165,150,165,150,320,215,320,215,184,365,185,365,320]
+        }
+
+        }
+      }
+
+
+       //cordinates of second floor zones
+
+      function getData3() {
+        return {
+         '1scct': {
+            color: 'green',
+            points: [200,30,230,30,230,130,200,130]
+          }
+          
+        }
+      }
+
+       //cordinates of Third floor zones
+
+      function getData4() {
+        return {
+         '1scct': {
+            color: 'yellow',
+            points: [300,30,330,30,330,130,300,130]
+          }
+          
+        }
+      }
+
+
+      //Function to draw tooltip at x y cordinate
+
       function updateTooltip(tooltip, x, y, text) {
         tooltip.getText().text(text);
         tooltip.position({x:x, y:y});
         tooltip.show();
       }
 
+       //Function to draw tooltip2 at x y cordinate
+
+      function updateTooltip2(tooltip2, x, y, text) {
+        tooltip2.getText().text(text);
+        tooltip2.position({x:x, y:y});
+        tooltip2.show();
+      }
+
+      //stage for container 1 (EY building)
 
       var stage = new Kinetic.Stage({
         container: 'container',
         width: 578,
         height: 325
       });
+
+      //shapelayer and tooltiplayer of container 1
+
       var shapesLayer = new Kinetic.Layer();
       var tooltipLayer = new Kinetic.Layer();
-      
-      var tooltip = new Kinetic.Label({
+
+
+      //tooltip for container1
+       var tooltip = new Kinetic.Label({
         opacity: 0.75,
         visible: false,
         listening: false
       });
-      
+
+
+      //stage for container 2 (floor plans)
+
+      var stage2 = new Kinetic.Stage({
+        container: 'container2',
+        width: 578,
+        height: 325
+      });
+     
+
+     //shapelayer and tooltiplayer of container 2
+      var tooltipLayer2 = new Kinetic.Layer();
+      var shapesLayer2 = new Kinetic.Layer();
+
+        
+     //tooltip  configuration container 1
+
       tooltip.add(new Kinetic.Tag({
         fill: 'black',
         pointerDirection: 'down',
@@ -97,13 +202,13 @@
         fill: 'white'
       }));
       
-      tooltipLayer.add(tooltip);
 
-      // get areas data
+
+      // get areas data of container 1
       var areas = getData();
-
-      // draw areas
-      for(var key in areas) {
+    
+     // draw areas of container1
+     for(var key in areas) {
 
         var area = areas[key];
         var points = area.points;
@@ -112,75 +217,214 @@
           points: points,
           fill: area.color,
           opacity: 0,
-          // custom attr
           key: key,
           closed: true
         });
-
-        shapesLayer.add(shape);
+         shapesLayer.add(shape);
+         tooltipLayer.add(tooltip);
 
       }
+
+      //add shapes to stage
 
       stage.add(shapesLayer);
       stage.add(tooltipLayer);
 
+      //tooltip2 for container 2
+
+     var tooltip2 = new Kinetic.Label({
+        opacity: 0.75,
+        visible: false,
+        listening: false
+      });
+        
+      tooltip2.add(new Kinetic.Tag({
+        fill: 'black',
+        pointerDirection: 'down',
+        pointerWidth: 10,
+        pointerHeight: 10,
+        lineJoin: 'round',
+        shadowColor: 'black',
+        shadowBlur: 10,
+        shadowOffset: {x:10,y:10},
+        shadowOpacity: 0.5
+      }));
+      
+      tooltip2.add(new Kinetic.Text({
+        text: '',
+        fontFamily: 'Calibri',
+        fontSize: 18,
+        padding: 5,
+        fill: 'white'
+      }));
+
+
+      
+      
+      //updates region in selected floor
+      
+       function updatepoints()
+       {
+
+          
+             var areas2;
+             shapesLayer2.removeChildren();
+            // shapesLayer2.draw();
+             
+             tooltipLayer2.removeChildren();
+           //  tooltipLayer2.draw();
+          
+           if(curr_floor=="1st Floor")
+                 areas2 = getData2();
+           else if(curr_floor=="2nd Floor")
+                 areas2 = getData3();
+           else if(curr_floor=="3rd Floor")
+                 areas2 = getData4();
+           
+
+          //draw area of selected floor
+                 for(var key in areas2) 
+                 {
+
+                        var area = areas2[key];
+                        var points = area.points;
+
+                        var shape = new Kinetic.Line({
+                          points: points,
+                          fill: area.color,
+                          opacity: 0,
+                          // custom attr
+                          key: key,
+                          closed: true
+                      
+                         });
+         
+                      shapesLayer2.add(shape);
+                      tooltipLayer2.add(tooltip2);
+
+                }
+            
+            //add shape to stage2
+             stage2.add(shapesLayer2);
+             stage2.add(tooltipLayer2);
+             
+             
+       }
       
 
+       //mouse over function for container 1
 
-      stage.on('mouseover', function(evt) {
+      stage.on('mouseover', function(evt)
+       {
+          var shape = evt.targetNode;
+         if (shape)
+         {
+           shape.setOpacity(0.5);
+           shapesLayer.draw();
+         }
+      });
+
+
+      //mouse out event for container 1
+
+      stage.on('mouseout', function(evt) 
+      {
+      
         var shape = evt.targetNode;
-        if (shape) {
-          shape.setOpacity(0.5);
-          shapesLayer.draw();
+        if (shape)
+         {
+             shape.opacity(0);
+             shapesLayer.draw();
+             tooltip.hide();
+             tooltipLayer.draw();
         }
       });
-      stage.on('mouseout', function(evt) {
-        var shape = evt.targetNode;
-        if (shape) {
-          shape.opacity(0);
-          shapesLayer.draw();
-          tooltip.hide();
-          tooltipLayer.draw();
-        }
-      });
-      stage.on('mousemove', function(evt) {
-        var shape = evt.targetNode;
-        if (shape) {
-          var mousePos = stage.getPointerPosition();
-          var x = mousePos.x;
-          var y = mousePos.y - 5;
-          updateTooltip(tooltip, x, y, shape.getAttr('key'));
-          tooltipLayer.batchDraw();
+
+
+      //mouse move function for container 1
+
+      stage.on('mousemove', function(evt)
+       {
+            var shape = evt.targetNode;
+            if (shape) 
+            {
+                  var mousePos = stage.getPointerPosition();
+                  var x = mousePos.x;
+                  var y = mousePos.y - 5;
+                  updateTooltip(tooltip, x, y, shape.getAttr('key'));
+                  tooltipLayer.batchDraw();
           
-          //mouseToText.setText("Mouse: x="+mouseX+", y="+mouseY);
-        }
+            }
+      });
+
+
+      //mouse out function for container 2
+
+      stage2.on('mouseout', function(evt)
+      {
+           var shape = evt.targetNode;
+           if (shape)
+            {
+                shape.opacity(0);
+                shapesLayer2.draw();
+                tooltip2.hide();
+                tooltipLayer2.draw();
+            }
+      });
+
+   
+
+      //mouse move function for container 2
+
+      stage2.on('mousemove', function(evt) 
+      {
+            var shape = evt.targetNode;
+            if (shape) 
+            {
+                  var mousePos = stage2.getPointerPosition();
+                  var x = mousePos.x;
+                  var y = mousePos.y - 5;
+                   updateTooltip2(tooltip2, x, y, shape.getAttr('key'));
+                    tooltipLayer2.batchDraw();
+                 
+            }
       }); 
-       stage.on('click', function(evt) {
-        var shape = evt.targetNode;
-        if (shape) {
-          console.log("clicked" + shape.getAttr('key'));
-          var can = document.getElementById('container2');
-          var ctx = can.getContext('2d');
-          var img = new Image();
-          img.onload = function(){
-              can.width = img.width;
-              can.height = img.height;
-              ctx.drawImage(img, 0, 0, img.width, img.height);
-          }
 
-          if(shape.getAttr('key')=="1st Floor")
-                img.src="base.png"
-          else if(shape.getAttr('key')=="2nd Floor")
-                img.src="gf.png"
-          else if(shape.getAttr('key')=="3rd Floor")
-                img.src="ff.png";
-          
-          else
-             document.getElementById("container2").style.backgroundImage = "";
+      //mouse over function for container 2
 
-        }
+     stage2.on('mouseover', function(evt)
+      {
+           var shape = evt.targetNode;
+           if (shape) 
+           {
+               shape.setOpacity(0.5);
+               shapesLayer2.draw();
+           }
       });
-      
+  
+
+     //onclick function for container 1
+ 
+     stage.on('click', function(evt) 
+     {
+        var shape = evt.targetNode;
+
+        if (shape)
+         {
+                curr_floor=shape.getAttr('key');
+                updatepoints();
+              if(shape.getAttr('key')=="1st Floor")
+                    document.getElementById("container2").style.backgroundImage = "url('base.png')";
+              else if(shape.getAttr('key')=="2nd Floor")
+                    document.getElementById("container2").style.backgroundImage = "url('gf.png')";
+              else if(shape.getAttr('key')=="3rd Floor")
+                    document.getElementById("container2").style.backgroundImage = "url('ff.png')";
+              else
+                     document.getElementById("container2").style.backgroundImage = "";
+        }
+
+      });
+
     </script>
   </body>
 </html>
