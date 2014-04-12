@@ -36,15 +36,15 @@
     <script defer="defer">
       function getData() {
         return {
-          '1st Floor': {
+          'Basement': {
             color: 'blue',
             points: [49,197,49,179, 378,246, 526,210, 524,235, 377,277]
           },
-          '2nd Floor': {
+          'Ground Floor': {
             color: 'red',
             points: [49,179,47,162,380,216,528,185,526,208,378,246]
           },
-          '3rd Floor': {
+          'First Floor': {
             color: 'yellow',
             points: [47,162,46,143,382,181,530,159,528,183,380,214]
           }
@@ -102,19 +102,49 @@
         }
       }
 
-
-       //cordinates of second floor zones
-
       function getData3() {
         return {
-         '1scct': {
+          'Zone 1': {
+            color: 'blue',
+            points: [2,2,2,143,120,143,120,2]
+          },
+          'Zone 2': {
+            color: '00FFFF',
+            points: [  120,143,2,143,2,313,120,313]
+          },
+          'zone 3': {
+            color: 'yellow',
+            points: [214,2,120,2,120,125,214,125]
+          },
+          'zone 4': {
             color: 'green',
-            points: [200,30,230,30,230,130,200,130]
-          }
-          
+            points: [  120,125,214,125,214,157,428,157,428,313,363,313,363,177,214,177,214,313,120,313]
+          },
+          'zone 5': {
+            color: 'orange',
+            points: [ 214,2,214,157,363,157,363,99,428,99,428,2]
+         },
+          'zone 6': {
+            color: 'violet',
+            points: [ 363,99,428,99,428,2,575,2,575,157,363,157]
+       },
+          'zone 7': {
+            color: 'ivory',
+            points: [428,157,428,313,575,313,575,222,440,222,440,157]
+          },
+          'zone 8': {
+            color: 'brown',
+            points: [  440,157,575,157,575,222,440,222]
+        },
+          'zone 9': {
+            color: 'red',
+            points: [  363,313,363,177,214,177,214,313]
         }
       }
+    }
+       //cordinates of second floor zones
 
+      
        //cordinates of Third floor zones
 
       function getData4() {
@@ -266,20 +296,20 @@
        function updatepoints()
        {
 
-          
+            //container2.removeChildren();
              var areas2;
-             shapesLayer2.removeChildren();
-            // shapesLayer2.draw();
+             shapesLayer2.destroyChildren();
+             //shapesLayer2.draw();
              
-             tooltipLayer2.removeChildren();
+             tooltipLayer2.remove();
            //  tooltipLayer2.draw();
           
-           if(curr_floor=="1st Floor")
-                 areas2 = getData2();
-           else if(curr_floor=="2nd Floor")
-                 areas2 = getData3();
-           else if(curr_floor=="3rd Floor")
+           if(curr_floor=="Basement")
                  areas2 = getData4();
+           else if(curr_floor=="Ground Floor")
+                 areas2 = getData3();
+           else if(curr_floor=="First Floor")
+                 areas2 = getData2();
            
 
           //draw area of selected floor
@@ -293,7 +323,7 @@
                           points: points,
                           fill: area.color,
                           opacity: 0,
-                          // custom attr
+                          
                           key: key,
                           closed: true
                       
@@ -384,8 +414,8 @@
                   var mousePos = stage2.getPointerPosition();
                   var x = mousePos.x;
                   var y = mousePos.y - 5;
-                   updateTooltip2(tooltip2, x, y, shape.getAttr('key'));
-                    tooltipLayer2.batchDraw();
+                  updateTooltip2(tooltip2, x, y, shape.getAttr('key'));
+                  tooltipLayer2.batchDraw();
                  
             }
       }); 
@@ -413,14 +443,14 @@
          {
                 curr_floor=shape.getAttr('key');
                 updatepoints();
-              if(shape.getAttr('key')=="1st Floor")
-                    document.getElementById("container2").style.backgroundImage = "url('base.png')";
-              else if(shape.getAttr('key')=="2nd Floor")
-                    document.getElementById("container2").style.backgroundImage = "url('gf.png')";
-              else if(shape.getAttr('key')=="3rd Floor")
-                    document.getElementById("container2").style.backgroundImage = "url('ff.png')";
+              if(shape.getAttr('key')=="Basement")
+                    document.getElementById("container2").style.backgroundImage = "url('bottom.png')";
+              else if(shape.getAttr('key')=="Ground Floor")
+                    document.getElementById("container2").style.backgroundImage = "url('middle.png')";
+              else if(shape.getAttr('key')=="First Floor")
+                    document.getElementById("container2").style.backgroundImage = "url('top.png')";
               else
-                     document.getElementById("container2").style.backgroundImage = "";
+                    document.getElementById("container2").style.backgroundImage = "";
         }
 
       });
