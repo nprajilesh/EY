@@ -660,18 +660,13 @@
       			var myob = setInterval(function(){
       				if(i<myJSONobj.length){
       				highlightzone(myJSONobj[i].zone);	
-      					i+=1;
+      					i++;
       					}
       				else
       					clearInterval(myob);
       				
       			},1000);
-
-      			function stop(myob)
-      			{
-      				clearInterval(myob);
-      			}
-      			
+   			
 	  	}
 
 	 
@@ -695,18 +690,7 @@
           updatepoints();
         });
 
-     
-     function delay(amount)
-     {
-     		for(var i=0;i<1000000*amount;i++)
-     			for(var i=0;i<1000000*amount;i++)
-     				for(var i=0;i<1000000*amount;i++)
-     					for(var i=0;i<1000000*amount;i++)
-     						for(var i=0;i<1000000*amount;i++);
-
-
-     }
-
+   
     </script>
   </body>
 </html>
