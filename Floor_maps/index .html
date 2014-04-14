@@ -25,27 +25,47 @@
         float: right;
         border:2px solid gray;
       }
+
     
     </style>
   </head>
   <body>
    
     <div id="container"></div><div id="container2" ></div>
+
+  <input type="text" id="search-box" > <br>
+  <button type="button" onclick="searchemployee()">search</button>
+
+
+  <input type="text" id="play-emp" >asset name<br>
+  <button type="button"  onclick="playhistory()">play history</button>
+
      
 
     <script src="kinetic.min.js" type="text/javascript"></script>
-    <script defer="defer">
+    <script src="jquery-1.11.0.min.js"></script>
+    <script defer="defer">	
+
+    	var myJSONobj =
+    	[{"zone":"101",
+    	"time":"10.30"}
+    	,{"zone":"104","time":"10.35"},{"zone":"106","time":"10.40"},{"zone":"104","time":"10.50"},{"zone":"201","time":"11.30"},{"zone":"204","time":"11.50"},{"zone":"208","time":"12.30"},{"zone":"305","time":"1.30"},{"zone":"307","time":"4.30"},{"zone":"102","time":"6.30"}]
+
+
       function getDataMain() {
         return {
           'Basement': {
+          	id:'1',
             color: 'green',
             points: [49,197,49,179, 380,249, 527,210, 526,233, 377,277]
           },
           'Ground Floor': {
+          	id:'2',
             color: 'orange',
             points: [49,179,47,163,380,217,529,186,527,209,378,248]
           },
           'First Floor': {
+          	id:'3',
             color: 'yellow',
             points: [48,162,47,143,382,182,530,160,529,184,380,216]
           }
@@ -56,7 +76,30 @@
       //indiactes currently selected floor
       var curr_floor=" ";
       var curr_zone=" ";
-      
+      var search_zone=307;
+      var prev_floor="   ";
+
+      //shapelayer and tooltiplayer of container 1
+      var shapesLayer = new Kinetic.Layer();
+      var tooltipLayer = new Kinetic.Layer();
+      var textLayer = new Kinetic.Layer();
+      var rectLayer = new Kinetic.Layer();
+   /*   var background= new Kinetic.Layer();
+      var imageobj = new Image();
+      var bgImage = new Kinetic.image({
+      	image : imageobj
+      });
+    	
+
+    	
+    	imageobj.src='bottom.png';
+    	background.add(bgImage);
+    	stage2.add(background);
+ 	 */
+ 	  //shapelayer and tooltiplayer of container 2
+      var tooltipLayer2 = new Kinetic.Layer();
+      var shapesLayer2 = new Kinetic.Layer();
+     
       
       //cordinates of Third floor zones
       function getDataTop() {
@@ -224,14 +267,6 @@
         tooltip.show();
       }
 
-       //Function to draw tooltip2 at x y cordinate
-
-      function updateTooltip2(tooltip2, x, y, text) {
-        tooltip2.getText().text(text);
-        tooltip2.position({x:x, y:y});
-        tooltip2.show();
-      }
-
       //stage for container 1 (EY building)
 
       var stage = new Kinetic.Stage({
@@ -267,12 +302,7 @@
         fill: 'green'
       });
       
-      //shapelayer and tooltiplayer of container 1
-      var shapesLayer = new Kinetic.Layer();
-      var tooltipLayer = new Kinetic.Layer();
-      var textLayer = new Kinetic.Layer();
-      var rectLayer = new Kinetic.Layer();
-
+     
       //tooltip for container1
       var tooltip = new Kinetic.Label({
         opacity: 0.75,
@@ -290,9 +320,6 @@
      
       
 
-      //shapelayer and tooltiplayer of container 2
-      var tooltipLayer2 = new Kinetic.Layer();
-      var shapesLayer2 = new Kinetic.Layer();
       
       textLayer.add(rect);
       textLayer.add(simpleText);
@@ -332,8 +359,9 @@
           var points = area.points;
 
           var shape = new Kinetic.Line({
-            points: points,
+            points: points, 
             fill: area.color,
+            id:area.id,
             opacity: 0,
             key: key,
             closed: true
@@ -478,7 +506,7 @@
       stage2.on('mouseout', function(evt)
         {
           var shape = evt.targetNode;
-          if (shape.getAttr('key')!=curr_zone)
+          if (shape.getAttr('id')!=curr_zone)
             {
               shape.opacity(0);
               shapesLayer2.draw();
@@ -502,7 +530,7 @@
               var mousePos = stage2.getPointerPosition();
               var x = mousePos.x;
               var y = mousePos.y - 5;
-              updateTooltip2(tooltip2, x, y, shape.getAttr('key'));
+              updateTooltip(tooltip2, x, y, shape.getAttr('key'));
               tooltipLayer2.batchDraw();
             }
         }); 
@@ -529,24 +557,36 @@
             {
               curr_floor=shape.getAttr('key');
               curr_zone=" ";
-              textLayer.clear();
-              textLayer.destroyChildren();
-              shapesLayer.removeChildren();
-              updatepoints1();
-              document.getElementById("container2").style.border="none";
-              updatepoints();
-                
-              if(shape.getAttr('key')=="Basement")
-                    document.getElementById("container2").style.backgroundImage = "url('bottom.png')";
-              else if(shape.getAttr('key')=="Ground Floor")
-                    document.getElementById("container2").style.backgroundImage = "url('middle.png')";
-              else if(shape.getAttr('key')=="First Floor")
-                    document.getElementById("container2").style.backgroundImage = "url('top.png')";
-              else
-                    document.getElementById("container2").style.backgroundImage = "";
+              updatefloorpic(curr_floor); 
+              prev_floor=curr_floor;
+             
             }
         });
       
+
+      //function to load detailde image floor
+
+      function updatefloorpic(floorname)
+      {
+      		  shapesLayer.removeChildren();
+              updatepoints1();
+              document.getElementById("container2").style.border="none";
+              updatepoints();
+               
+      		 textLayer.clear();
+             textLayer.destroyChildren();
+             if(prev_floor!=curr_floor)
+             {
+      	 			if(floorname==="Basement")
+                	    document.getElementById("container2").style.backgroundImage = "url('bottom.png')";
+              		else if(floorname==="Ground Floor")
+                    	document.getElementById("container2").style.backgroundImage = "url('middle.png')";
+              		else if(floorname==="First Floor")
+                    	document.getElementById("container2").style.backgroundImage = "url('top.png')";
+              		else
+                    	document.getElementById("container2").style.backgroundImage = "";
+             }
+      }
 
       //onclick function for container 2
 
@@ -555,7 +595,7 @@
           var shape = evt.targetNode;
           if(shape)
             {
-              curr_zone=shape.getAttr('key');
+              curr_zone=shape.getAttr('id');
               shapesLayer2.removeChildren();
               updatepoints();
               var zone_id=shape.getAttr('id');
@@ -563,12 +603,86 @@
             }
         });
 
+      //onclick function to search employee
+
+    	function searchemployee()
+      	{
+      		 var search_zone=document.getElementById('search-box').value;
+      		 highlightzone(search_zone);
+      			             
+      	}
+
+      	//function to highlight selcted zone
+
+      	function highlightzone(search_zone)
+      	{
+      		curr_zone=search_zone;
+      		 var floor_num;
+      			
+      		 if(search_zone>300)
+      		 {
+      		 	floor_num=3;
+      		 	curr_floor="First Floor";
+      		 }
+      		 else if(search_zone>200)
+      		 {
+      		 	curr_floor="Ground Floor";
+      		 	floor_num=2;
+      		 }
+      		 else
+      		 {
+      		 	curr_floor="Basement";
+      		 	floor_num=1;
+      		 }
+
+      		 updatefloorpic(curr_floor);
+      		 prev_floor=curr_floor; 
+      		 var shape1 =stage.find('#'+floor_num);
+      		 shape1.setOpacity(0.5);
+      		 shapesLayer.draw();
+
+
+      		 shapesLayer2.removeChildren();
+              updatepoints();
+             
+      		 var shape2=stage2.find('#'+search_zone);
+      		 shape2.setOpacity(0.5);
+      		 shapesLayer2.draw();
+      		
+      	}
+
+      	function playhistory()
+      	{
+      		var asset_id=document.getElementById('play-emp').value;
+
+      			console.log(myJSONobj.length);
+      			var i=0;
+      			var myob = setInterval(function(){
+      				if(i<myJSONobj.length){
+      				highlightzone(myJSONobj[i].zone);	
+      					i+=1;
+      					}
+      				else
+      					clearInterval(myob);
+      				
+      			},1000);
+
+      			function stop(myob)
+      			{
+      				clearInterval(myob);
+      			}
+      			
+	  	}
+
+	 
+
 
       //function to remove selction onclick  ouside building(container 1)
 
       stage.getContent().addEventListener('click', function()
         {
           curr_floor="";
+          prev_floor=" ";
           document.getElementById("container2").style.backgroundImage = "";
           document.getElementById("container2").style.border="2px solid gray";
           textLayer.destroyChildren();
@@ -580,6 +694,19 @@
           updatepoints1();
           updatepoints();
         });
+
+     
+     function delay(amount)
+     {
+     		for(var i=0;i<1000000*amount;i++)
+     			for(var i=0;i<1000000*amount;i++)
+     				for(var i=0;i<1000000*amount;i++)
+     					for(var i=0;i<1000000*amount;i++)
+     						for(var i=0;i<1000000*amount;i++);
+
+
+     }
+
     </script>
   </body>
 </html>
