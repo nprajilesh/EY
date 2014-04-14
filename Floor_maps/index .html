@@ -35,7 +35,7 @@
 
     <script src="kinetic.min.js" type="text/javascript"></script>
     <script defer="defer">
-      function getData() {
+      function getDataMain() {
         return {
           'Basement': {
             color: 'green',
@@ -322,8 +322,8 @@
       
 
       function updatepoints1(){
-
-        var areas = getData();
+      	// get areas data of container 1
+        var areas = getDataMain();
     
         // draw areas of container1
         for(var key in areas) {
@@ -348,7 +348,7 @@
         stage.add(tooltipLayer);
 
       }
-      // get areas data of container 1
+      
       
       //tooltip2 for container 2
 
@@ -547,6 +547,9 @@
             }
         });
       
+
+      //onclick function for container 2
+
       stage2.on('click',function(evt)
         {
           var shape = evt.targetNode;
@@ -561,6 +564,7 @@
         });
 
 
+      //function to remove selction onclick  ouside building(container 1)
 
       stage.getContent().addEventListener('click', function()
         {
