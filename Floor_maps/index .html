@@ -40,10 +40,7 @@
     <script src="jquery-1.11.0.min.js"></script>
     <script defer="defer">  
 
-      var myJSONobj =
-      [{"zone":"101",
-      "time":"10.30"}
-      ,{"zone":"104","time":"10.35"},{"zone":"106","time":"10.40"},{"zone":"104","time":"10.50"},{"zone":"201","time":"11.30"},{"zone":"204","time":"11.50"},{"zone":"208","time":"12.30"},{"zone":"305","time":"1.30"},{"zone":"307","time":"4.30"},{"zone":"102","time":"6.30"}];
+      var myJSONobj = [{"zone":"101", "time":"10.30"},{"zone":"108","time":"10.35"},{"zone":"106","time":"10.40"},{"zone":"104","time":"10.50"},{"zone":"201","time":"11.30"},{"zone":"204","time":"11.50"},{"zone":"208","time":"12.30"},{"zone":"305","time":"1.30"},{"zone":"307","time":"4.30"},{"zone":"102","time":"6.30"}];
 
 
   
@@ -429,6 +426,47 @@
              stage2.add(tooltipLayer2);
          }
       
+
+        //function to update no floor selected text
+        function nofloorselected()
+        {
+             document.getElementById("container2").style.backgroundImage = "";
+             document.getElementById("container2").style.border="2px solid gray";
+             textLayer.destroyChildren();
+             textLayer.add(rect);
+             textLayer.add(simpleText);
+             stage2.add(textLayer);
+             shapesLayer.removeChildren();
+             shapesLayer2.removeChildren();
+             updatepoints1();
+             updatepoints();
+        
+        }
+
+      //function to load detailde image floor
+      function updatefloorpic(floorname)
+      {
+            shapesLayer.removeChildren();
+            updatepoints1();
+            document.getElementById("container2").style.border="none";
+            updatepoints(); 
+            textLayer.clear();
+            textLayer.destroyChildren();
+            
+            if(prev_floor!=curr_floor || curr_floor=='$')
+            {
+                  if(floorname==="Basement")
+                      document.getElementById("container2").style.backgroundImage = "url('bottom.png')";
+                  else if(floorname==="Ground Floor")
+                      document.getElementById("container2").style.backgroundImage = "url('middle.png')";
+                  else if(floorname==="First Floor")
+                      document.getElementById("container2").style.backgroundImage = "url('top.png')";
+                  else
+                      nofloorselected();
+            }
+      }
+
+
           
       //mouse over function for container 1
       updatepoints1();
@@ -531,29 +569,6 @@
         });
       
 
-      //function to load detailde image floor
-      function updatefloorpic(floorname)
-      {
-      		  shapesLayer.removeChildren();
-            updatepoints1();
-            document.getElementById("container2").style.border="none";
-            updatepoints(); 
-        		textLayer.clear();
-            textLayer.destroyChildren();
-            
-            if(prev_floor!=curr_floor)
-            {
-      	 		    	if(floorname==="Basement")
-                	    document.getElementById("container2").style.backgroundImage = "url('bottom.png')";
-              		else if(floorname==="Ground Floor")
-                    	document.getElementById("container2").style.backgroundImage = "url('middle.png')";
-              		else if(floorname==="First Floor")
-                    	document.getElementById("container2").style.backgroundImage = "url('top.png')";
-              		else
-                    	document.getElementById("container2").style.backgroundImage = "";
-            }
-      }
-
       //onclick function for container 2
       stage2.on('click',function(evt)
        {
@@ -588,6 +603,9 @@
       		 	    curr_floor="Basement";
       		 	    floor_num=1;
       		  }
+            else
+              curr_floor="$";
+            console.log(curr_floor);
 
       		 updatefloorpic(curr_floor);
       		 prev_floor=curr_floor; 
@@ -613,7 +631,7 @@
             var myob=setInterval(function(){
 
               x++;
-              if(x>10)
+              if(x>20)
               {
                 clearInterval(myob);
                 shape2.setOpacity(0.5);
@@ -637,7 +655,7 @@
           
               }
 
-            },500);
+            },250);
         }
 
      //onclick function to search employee
@@ -668,22 +686,14 @@
    			
 	  	  }
 
+
       //function to remove selction onclick  ouside building(container 1)
       stage.getContent().addEventListener('click', function()
         {
           curr_floor="";
           prev_floor=" ";
-          document.getElementById("container2").style.backgroundImage = "";
-          document.getElementById("container2").style.border="2px solid gray";
-          textLayer.destroyChildren();
-          textLayer.add(rect);
-          textLayer.add(simpleText);
-          stage2.add(textLayer);
-          shapesLayer.removeChildren();
-          shapesLayer2.removeChildren();
-          updatepoints1();
-          updatepoints();
-        });
+          nofloorselected();
+         });
 
    
     </script>
