@@ -1,0 +1,167 @@
+           
+                <!-- Content Header (Page header) -->
+             
+                <!-- Main content -->
+                <section ng-controller ="locController"  class="content">
+                    <div class="row">
+                        <div class="col-lg-2 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-blue" style="border-radius:0">
+                                <i class="fa fa-tag" style="font-size:50px;padding:16px;vertical-align:center;"></i>
+                                <div style="text-align:center;vertical-align:center;float:right;" class="inner">
+                                    
+                                    <h2 style="margin-top:0;margin-bottom:0;font-family:'Source Sans Pro'">
+                                        {{assetcount}}
+                                    </h2>
+                                    <p style="font-family:'Source Sans Pro'">Users</p>
+                                </div>
+                            </div>
+                        </div><!-- ./col --> 
+                        <div class="col-lg-2 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-green" style="border-radius:0">
+                                <i class="fa  fa-flag" style="font-size:50px;padding:16px;vertical-align:center;"></i>
+                                <div style="text-align:center;float:right;margin-left:-14px;" class="inner">
+                                    
+                                    <h2 style="margin-top:0;margin-bottom:0;font-family:'Source Sans Pro'">
+                                        {{userLocations}}
+                                    </h2>
+                                    <p style="font-family:'Source Sans Pro'">Locations</p>
+                                </div>
+                            </div>
+                        </div><!-- ./col --> 
+                        <div class="col-lg-2 col-xs-6">
+                            <div class="small-box bg-yellow" style="border-radius:0">
+                                <i class="fa  fa-warning" style="font-size:50px;padding:16px;vertical-align:center;"></i>
+                                <div style="text-align:center;vertical-align:center;float:right;margin-left:-14px;" class="inner">
+                                    
+                                    <h2 style="margin-top:0;margin-bottom:0;font-family:'Source Sans Pro'">
+                                        {{warnings}}
+                                    </h2>
+                                    <p style="font-family:'Source Sans Pro'">Warnings</p>
+                                </div>
+                            </div>
+                        </div><!-- ./col -->    
+                        <div class="col-lg-6 col-xs-12">
+                            <div class="box box-danger">
+                                <div class="box-header">
+                                    <div class="pull-right box-tools">
+                                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                                    </div>
+                                    <i class="fa fa-location-arrow"></i>
+
+                                    <h3 class="box-title">Select Location</h3>
+
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="box-body no-padding col-md-8">
+                                    <select class="form-control" ng-model="newLoc" ng-options="loc.id as loc.name for loc in locations">
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button ng-click="selLoc(newLoc)" class="btn btn-primary btn-flat">Select</button>
+                                </div>
+                                <div class="box-footer">
+                                    <div class="row">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>               
+                    </div>
+                    <div class="row">
+                        <section class="col-lg-12 connectedSortable"> 
+                            <div class="col-md-12 no-padding">
+                            <div class="box box-danger" id="loading-example">
+                                <div class="box-header">
+                                    <div class="pull-right box-tools">
+                                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                                    </div>
+                                    <i class="fa fa-bar-chart-o"></i>
+
+                                    <h3 class="box-title">Log Stats</h3>
+                                </div>
+                                <div class="box-body no-padding" id="main-div">
+                                    <iframe style="border:0px;width:100%;min-height:250px;overflow-x:auto"src="http://localhost:1337/views/barchart.html"></iframe>
+                                </div>
+                                <div class="box-footer">
+                                    <div class="row">
+                                   
+                                    </div>
+                                </div>
+                            </div> 
+                            </div>
+                        </section>
+                    </div>
+                    <div class="row">
+                         <section class="col-lg-12 connectedSortable"> 
+                           
+                            <div class="box box-danger" id="loading-example">
+                                <div class="box-header">
+                                    <!-- tools box -->
+                                    <div class="pull-right box-tools">
+                                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                                    </div><!-- /. tools -->
+                                    <i class="fa fa-cloud"></i>
+
+                                    <h3 class="box-title">Chart</h3>
+                                </div><!-- /.box-header -->
+                                <div class="box-body">
+                                    <iframe style="border:0px;width:100%;min-height:350px;overflow-x:auto"src="http://localhost:1337/views/chart.html"></iframe>                                    
+                                </div><!-- /.box-body -->
+                                <div class="box-footer">
+                                    <div class="row">
+                                    </div><!-- /.row -->
+                                </div><!-- /.box-footer -->
+                            </div><!-- /.box --> 
+                                
+                        </section>  
+                    </div>
+                    <div class="row">
+
+                        <section class="col-lg-6 connectedSortable"> 
+                           
+                            <div class="box box-danger" id="loading-example">
+                                <div class="box-header">
+                                    <!-- tools box -->
+                                    <div class="pull-right box-tools">
+                                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                                    </div><!-- /. tools -->
+                                    <i class="fa fa-cloud"></i>
+
+                                    <h3 class="box-title">Log Stats</h3>
+                                </div><!-- /.box-header -->
+                                <div class="box-body no-padding">
+                                    <div class="table-responsive">
+                                        <!-- .table - Uses sparkline charts-->
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <th>User id</th>
+                                                    <th>Name</th>
+                                                    <th>Battery Level</th>
+                                                    <th>TimeStamp</th>
+                                                </tr>
+                                                <tr ng-repeat="user in users">
+                                                    <td>{{user.userid}}</td>
+                                                    <td>{{user.username}}</td>
+                                                    <td><span>{{user.batper}}</span></td>
+                                                    <td>{{user.timestamp}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table><!-- /.table -->
+                                    </div>
+                                </div><!-- /.box-body -->
+                                <div class="box-footer">
+                                    <div class="row">
+                                    </div><!-- /.row -->
+                                </div><!-- /.box-footer -->
+                            </div><!-- /.box --> 
+                        </section>
+
+
+                      
+                    </div>
+
+                </section><!-- /.content -->
+        

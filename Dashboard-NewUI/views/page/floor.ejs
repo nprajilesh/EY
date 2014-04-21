@@ -1,0 +1,125 @@
+			<section class="content" style="padding:5px;">    
+			<style type="text/css">
+			#container {
+		        background-color: black;
+		        background-image: url("./img/floorplan/ey2.png");
+		        background-position: 1px 0px;
+		        background-repeat: no-repeat;
+		        width: 580px;
+		        height: 327px;
+		        float:left; 
+		    }
+		    #container2 {
+		        background-color: white;
+		        background-position: 1px 0px;
+		        background-repeat: no-repeat;
+		        width: 580px;
+		        height: 327px;
+		        float: right;
+		        border:1px solid #eee;
+		      	border-left:0px; 
+		    }
+
+
+			</style>		
+			 <section ng-controller="floorController" class="col-lg-12 connectedSortable"> 
+                           
+                           <div class="row">
+								<div class="box box-danger">
+	                                <div class="box-header">
+	                                    <!-- tools box -->
+	                                    <div class="pull-right box-tools">
+	                                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+	                                    </div><!-- /. tools -->
+	                                    <i class="fa fa-cloud"></i>
+
+	                                    <h3 class="box-title">Floor Plan</h3>
+	                                </div><!-- /.box-header -->
+	                                
+	                                <div class="box-body no-padding col-md-6">
+	                                	<div id="container"></div>
+	                                </div><!-- /.box-body -->
+	                                 <div class="box-body no-padding col-md-6">
+	                                	<div id="container2"></div>
+	                                </div><!-- /.box-body -->
+	                                <div class="box-footer">
+	                                    <div class="row">
+	                                    </div><!-- /.row -->
+	                                </div><!-- /.box-footer -->
+	                            </div><!-- /.box --> 
+                           </div>
+                           <div class="row">
+                           		<div class="col-lg-6 no-padding">
+                           		<div class="box box-primary">
+                           			<div class="box-header">
+	                                    <!-- tools box -->
+	                                    <div class="pull-right box-tools">
+	                                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+	                                    </div><!-- /. tools -->
+	                                    <i class="fa fa-cloud"></i>
+
+	                                    <h3 class="box-title">Search History</h3>
+	                                </div><!-- /.box-header -->
+	                                <div class="box-body">
+	                                	 <label>Locate asset/employee by id</label>
+	                                     <div class="input-group margin">
+	                                        <input type="text" ng-model="searchvalue" id="search-box" class="form-control">
+	                                        <span class="input-group-btn">
+	                                            <button class="btn btn-info btn-flat" ng-click="getlogLoc(searchvalue)" type="button">Search!</button>
+                                        	</span>
+                                    	</div>
+                                    	<br>
+									    <label>Play employee History</label>
+	                                    <div class="input-group margin">
+									    	<input type="text" ng-model="playhistory" id="play-emp" class="form-control">
+	                                        <span class="input-group-btn">
+	                                            <button class="btn btn-info btn-flat" ng-click="getlogfullLoc(playhistory)" type="button">Play History!</button>
+                                        	</span>
+                                    	</div>
+    
+	                                </div>
+	                            </div>
+	                            </div>
+	                            <div class="col-lg-6">
+	                            <div class="box box-danger">
+                           			<div class="box-header">
+	                                    <!-- tools box -->
+	                                    <div class="pull-right box-tools">
+	                                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+	                                    </div><!-- /. tools -->
+	                                    <i class="fa fa-cloud"></i>
+
+	                                    <h3 class="box-title">Log</h3>
+	                                </div><!-- /.box-header -->
+	                                <div class="box-body">
+	                                	 <table class="table table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <th>User id</th>
+                                                    <th>Name</th>
+                                                    <th>Floor</th>
+                                                    <th>Zone</th>
+                                                    <th>Reciever</th>
+                                                </tr>
+                                                <tr ng-repeat="user in usrlog">
+                                                    <td>{{user.userid}}</td>
+                                                    <td>{{user.username}}</td>
+                                                    <td>{{user.floor}}</td>
+                                                    <td>{{user.zname}}</td>
+                                                    <td>{{user.rec}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table><!-- /.table -->
+    
+	                                </div>
+	                            </div>
+	                        	</div>
+                           </div>
+
+
+             </section>
+
+    <script src="/js/floor/kinetic.min.js" type="text/javascript"></script>
+    <script src="/js/floor/floorplan.js" defer="defer"></script>
+
+			</section>
