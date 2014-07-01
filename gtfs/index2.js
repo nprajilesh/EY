@@ -1,4 +1,5 @@
-function init(){
+function init()
+{
 	
 	var socket = io.connect('http://localhost:3000/');
 
@@ -10,21 +11,25 @@ function init(){
     });
 
     socket.on('realtime', function (data) {
-     // data = JSON.parse(data);
      	console.log(data);
-   //    console.log('received a message: ', data.ID);
    		angular.element("#app-angular").scope().updateFn(data);
-       updatevehicle(data);
+   	    updatevehicle(data);
     });
 
     createmap();
-
+    placelist();   
 }
 
 var map;
 var infowindow;
+var autocomplete;
+var uid;
+var markersarr = {};
+var vehicles = {};
 
-function createmap(){
+
+function createmap()
+{
 
 	map_canvas = document.getElementById("map_canvas");
 	var myOptions = {
@@ -35,49 +40,47 @@ function createmap(){
 	map = new google.maps.Map(map_canvas, myOptions);
 	infowindow = new google.maps.InfoWindow({
              content: 'holding...'
-        });
+        });	
 }
 
-function clearmap(){
-  for (var i = 0; i < markersarr.length; i++) {
-    markersarr[i].setMap(null);
-  	markersarr = [];
-  }
+
+function placelist()
+{
+	var input = document.getElementById('autocomplete');
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.bindTo('bounds', map);
+    google.maps.event.addListener(autocomplete, 'place_changed',onPlaceChanged);
 }
 
-var uid;
-var markersarr = {};
-var vehicles = {};
 
-function updatevehicle(data){
-
+function updatevehicle(data)
+{
 	var point = new google.maps.LatLng(data.lat, data.lng);
 	uid = data.ID
-
-	if(!(uid in markersarr)){
-
+	if(!(uid in markersarr))
 		vehicles[uid] = createvehicle(data,point);
-		//console.log("uid"+marker.id)
-	}else{
+	else
+	{
 		markersarr[uid].animateTo(point,{ 
 			easing : "linear",
 			duration : 1000,
 			complete : function(){}
 		});
-		//markersarr[uid].setPosition(point);
 	}
 }
 
-function createvehicle(data,point){
+function createvehicle(data,point)
+{
 
 	var image = 'bus.png'
-
 	var	newmarker = new google.maps.Marker({
 			position : point,
 			map : map,
 			id : uid,
 			icon : image
 		});
+
 	newmarker.setTitle(toString(uid));
 	markersarr[uid]=newmarker;
 	google.maps.event.addListener(markersarr[uid], 'mouseover', function() {
@@ -87,10 +90,8 @@ function createvehicle(data,point){
     });
 
     google.maps.event.addListener(markersarr[uid], 'mouseout', function() {
- 	
- 		infowindow.close();
 
-       	
+     		infowindow.close();       	
     });
 
   	google.maps.event.addListener(markersarr[uid], 'click', function() {
@@ -116,7 +117,24 @@ function createvehicle(data,point){
 
 }
 
-function showroute(data){
+function onPlaceChanged()
+ {	    
+		    var place = autocomplete.getPlace();
+		    if (!place.geometry) 
+		      return;
+
+		    // If the place has a geometry, then present it on a map.
+		    if (place.geometry.viewport) 
+		    	  map.fitBounds(place.geometry.viewport);
+		    else 
+		    {
+			      map.setCenter(place.geometry.location);
+			      map.setZoom(17);  // Why 17? Because it looks good.
+		    }  
+}
+
+
+function showroute(data)
+{
 	vehicles[data.id].route.setMap(map);
-//	console.log(vehicles[data.id].route.url);
 }
