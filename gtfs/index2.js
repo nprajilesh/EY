@@ -1,3 +1,12 @@
+var map;
+var poly;
+var path;
+var infowindow;
+var autocomplete;
+var uid;
+var markersarr = {};
+var vehicles = {};
+
 function init()
 {
 	
@@ -20,13 +29,6 @@ function init()
     placelist();   
 }
 
-var map;
-var infowindow;
-var autocomplete;
-var uid;
-var markersarr = {};
-var vehicles = {};
-
 
 function createmap()
 {
@@ -41,6 +43,15 @@ function createmap()
 	infowindow = new google.maps.InfoWindow({
              content: 'holding...'
         });	
+
+
+var polyOptions = {
+    strokeColor: '#428CCC',
+    strokeOpacity: 1.0,
+    strokeWeight: 3
+	  };
+  poly = new google.maps.Polyline(polyOptions);
+  poly.setMap(map);
 }
 
 
@@ -57,7 +68,7 @@ function placelist()
 function updatevehicle(data)
 {
 	var point = new google.maps.LatLng(data.lat, data.lng);
-	uid = data.ID
+	uid = data.ID;
 	if(!(uid in markersarr))
 		vehicles[uid] = createvehicle(data,point);
 	else
@@ -68,6 +79,9 @@ function updatevehicle(data)
 			complete : function(){}
 		});
 	}
+	path = poly.getPath();
+	path.push(point);
+	console.log('*****************************'+point);
 }
 
 function createvehicle(data,point)
