@@ -118,5 +118,5 @@ function createvehicle(data,point){
 
 function showroute(data){
 	vehicles[data.id].route.setMap(map);
-//dt	console.log(vehicles[data.id].route.url);
+//	console.log(vehicles[data.id].route.url);
 }

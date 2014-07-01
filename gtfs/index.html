@@ -4,7 +4,9 @@
   <title>TEST</title>
   <meta http-equiv="content-type" content="text/html;charset=utf-8" />
   <meta name="viewport" content="width=500">
-   <link href="/css/bootstrap/bootstrap.css" rel="stylesheet" type="text/css" />
+   <link href="css/bootstrap/bootstrap.css" rel="stylesheet" type="text/css" />
+   <link href="css/reset.css" rel="stylesheet" type="text/css" />
+   <link href="css/style.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>  
  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -13,6 +15,71 @@
   <script type="text/javascript" src="index2.js"></script>
   <script type="text/javascript" src="jquery_easing.js"></script>
   <script type="text/javascript" src="markerAnimate.js"></script>
+  <style type="text/css">
+    @import url(http://fonts.googleapis.com/css?family=Droid+Sans);
+        .header
+        {
+            font-family: 'Droid Sans', sans-serif;
+            
+            height:7%;
+            z-index: 1;
+            -webkit-box-shadow: 0px 3px 2px 0px rgba(50, 50, 50, 0.15);
+            -moz-box-shadow:    0px 3px 2px 0px rgba(50, 50, 50, 0.15);
+            box-shadow:         0px 3px 2px 0px rgba(50, 50, 50, 0.15);
+        }
+        .header h3
+        {
+            font-weight: bold;
+            font-size: 18px;
+            padding: 0px;
+            margin: 0px;
+            margin-top: 13px
+        }
+        #map_canvas
+        {
+            height: 88%;
+        }
+        .footer
+        {
+            z-index: 10;
+            height: 5%;
+            -webkit-box-shadow: 0px -7px 2px 0px rgba(50, 50, 50, 0.15);
+            -moz-box-shadow:    0px -7px 2px 0px rgba(50, 50, 50, 0.15);
+            box-shadow:         0px -7px 2px 0px rgba(50, 50, 50, 0.15);      
+        }
+        .btn
+        {
+            border-radius: 0px;
+            padding: 5px;
+        }
+        .panel-heading
+        {
+            border-radius: 0px;
+        }
+        .panel,.panel-primary
+        {
+            font-family: 'Droid Sans', sans-serif;
+            border-radius: 0px;
+            padding: 0px;
+        }
+        .address
+        {
+            font-family: 'Droid Sans';
+            padding-top: 8px;
+            font-size: 12px;
+        }
+        .footer ul
+        {
+            font-family: 'Droid Sans';
+            font-size: 13px;
+        }
+        .footer ul li
+        {
+            float: left;
+            font-size: underline;
+        }
+            </style>
+
 
    <script>
     var app = angular.module('details',[]);
@@ -21,7 +88,6 @@
       $scope.updateFn=function(data)
       {
         $scope.empList=data;
-        $log.info($scope.empList);
         $scope.$digest();
       }
     });
@@ -33,18 +99,24 @@
             <h3>REALTIME TRACKING SYSTEM - TRIVANDRUM</h3>
  </div>
         <div id="map_canvas" class="col-md-12"></div>
-  <div id="panel" class="panel panel-primary col-md-3 hidden">
+
+
+ <div id="panel" class="panel panel-primary col-md-3">
             <div class="panel-heading">Dashboard</div>
-  <div id="app-angular" ng-controller="DetailsController">
-    Lat      : {{empList.lat}}
-    <br/>
-    long     : {{empList.lng}}
-    <br/>
-    route    : {{empList.ID}}
-    <br/>
-    employee : {{empList.emp}}
-    </br>
-    time     : {{empList.time}}
+               <div id="app-angular" ng-controller="DetailsController">
+                    Lat      : {{empList.lat}}
+                    <br/>
+                    long     : {{empList.lng}}
+                    <br/>
+                    route    : {{empList.ID}}
+                    <br/>
+                    employee : 
+                            <ul>
+                            <li ng-repeat ="person in empList.emp "> {{person}}</li>
+                            </ul>
+                    </br>
+                    time     : {{empList.time}}
+            </div>
   </div>
    </body>
 </html>
