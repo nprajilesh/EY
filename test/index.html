@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Place Autocomplete</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+
+      th,td{
+        margin-top: 16px;
+        border:1px solid transparent;
+        border-collapse:collapse;
+        background-color: #fff;
+        outline: none;
+        height: 25px;
+      }
+
+      tr{
+        border:1px solid black;
+        border-collapse:collapse;
+      }
+
+      table
+      {
+        margin-top: 16px;
+        border:1px solid transparent;
+        border-collapse:collapse;
+        /*border-radius: 2px 0 0 2px;*/
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        outline: none;
+        height: 25px;
+      }
+
+      .controls {
+        margin-top: 16px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      #pac-input {
+        background-color: #fff;
+        padding: 0 11px 0 13px;
+        width: 400px;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        text-overflow: ellipsis;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+        margin-left: -1px;
+        padding-left: 14px;  /* Regular padding-left + 1. */
+        width: 401px;
+      }
+
+      .pac-container {
+        font-family: Roboto;
+      }
+
+      #type-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        padding: 5px 11px 0px 11px;
+      }
+
+      #type-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+}
+
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+
+    </head>
+  <body>
+    <form id="form" style="padding:10px">
+    
+    <input id="source" class="controls" type="text" placeholder="Enter a source" size="45" onclick="search(this)" onfocus="search(this)">
+
+    <button id="button"type="button" class="controls" onclick="addwaypoint(this)">Add Waypoint</button><br>
+    <input id="destination" class="controls" type="text" placeholder="Enter a destination" size="45" onclick="search(this)" onfocus="search(this)"><br>
+    <button type="button" class="controls" onclick="getdirections()">Get Directions</button><br>
+    </form>
+    <div id="map-canvas"></div>
+    <div id="directions-panel"></div>
+    <!-- <table id="table" style="width:300px">
+      <tr>
+      <td>Jill</td>
+      <td>Smith</td>    
+      <td>50</td>
+      </tr>
+      <tr>
+        <td>Eve</td>
+        <td>Jackson</td>    
+        <td>94</td>
+      </tr>
+    </table> -->
+  </body>
+</html>
