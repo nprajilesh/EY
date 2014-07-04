@@ -1,14 +1,15 @@
+var rendererOptions;
+var directionsDisplay;
+var directionsService;
+
 function initialize() {
-
-  
-
   var mapOptions = {
     zoom: 10,
     panControl: false,
     zoomControl: true,
     zoomControlOptions: {
         style: google.maps.ZoomControlStyle.SMALL,
-        position: google.maps.ControlPosition.LEFT_BOTTOM
+        position: google.maps.ControlPosition.RIGHT_BOTTOM
     }
   };
 
@@ -22,16 +23,21 @@ function initialize() {
     map.setCenter(pos);
   }
 
-  map = new google.maps.Map(document.getElementById('map-canvas'),
-    mapOptions);
+  map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
  
   //$("input").each(function(){    
-    var input = document.getElementById('form');
+    var input = document.getElementById('input');
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
     console.log(input);
-    map.controls[google.maps.ControlPosition.LEFT_TOP].push(document.getElementById('table'));
+   // map.controls[google.maps.ControlPosition.LEFT_TOP].push(document.getElementById('stops'));
     //});
-  
+  rendererOptions = {
+    map: map,
+    draggable: true
+    };
+  directionsService = new google.maps.DirectionsService();
+  directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+  directionsDisplay.setMap(map);
   
 }
 
@@ -71,7 +77,7 @@ function search(elem){
       });
       console.log(waypoints);
       count++;
-      //document.getElementById('button').disabled=false;
+      document.getElementById('button').disabled=false;
       if(count===8){
         document.getElementById('button').disabled=true;
       }
@@ -113,19 +119,18 @@ function search(elem){
   });
 }
 
+
+
+
+
+
+
 function getdirections(){
   console.log("button clicked");
   console.log(waypoints);
   //console.log(places['destination']);
 
-  var rendererOptions = {
-  draggable: true
-  };
-
-  var directionsDisplay;
-  var directionsService = new google.maps.DirectionsService();
-  directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-  directionsDisplay.setMap(map);
+  
 
   var request = {
       origin:places['source'],
@@ -139,15 +144,7 @@ function getdirections(){
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       console.log(response);
-      for (var i = 0, len = response.routes.length; i < len; i++) {
-        new google.maps.DirectionsRenderer({
-          map: map,
-          directions: response,
-          routeIndex: i,
-          draggable: true,
-          panel: document.getElementById('directions-panel')
-        });
-      }
+      directionsDisplay.setDirections(response);
     }
   });
 }
@@ -157,13 +154,43 @@ var count=0;
 var inputc=1;
 function addwaypoint(elem){
   
-  if(count<7){
+  if(count<8){
     console.log(count);
-    //document.getElementById(elem.id).disabled=true;
+    document.getElementById(elem.id).disabled=true;
     $("#form>input:nth-child("+inputc+")").after('<br><input id="waypoint-'+count+'" type="text" class="controls" placeholder="Via" onclick="search(this)" size="45">');
     inputc++;
     inputc++;
     console.log(inputc);
   }
+}
+
+var stops={};
+function addstops(elem){
+  var input = document.getElementById(elem.id);
+  var autocomplete = new google.maps.places.Autocomplete(input);
+  autocomplete.bindTo('bounds', map);
+
+  var marker = new google.maps.Marker({
+    map:map,
+    draggable:true,
+    animation: google.maps.Animation.DROP
+  });
+
+  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+    place = autocomplete.getPlace();
+    marker.setVisible(false);
+
+    if (!place.geometry)
+      return;
+    
+    if (place.geometry.viewport) 
+      map.fitBounds(place.geometry.viewport);
+
+    marker.setPosition(place.geometry.location);
+    marker.setVisible(true);
+
+  });
+
+
 }
 google.maps.event.addDomListener(window, 'load', initialize);
