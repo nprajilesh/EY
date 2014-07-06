@@ -33,9 +33,7 @@ function initialize() {
     pos = new google.maps.LatLng(8.487495,76.948623);   // Browser doesn't support Geolocation
     map.setCenter(pos);
   }
-  
-   
-  
+    
   var input = document.getElementById('input');
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
      
@@ -51,10 +49,6 @@ function initialize() {
 function search(elem){
   
   var input = document.getElementById(elem.id);
-  console.log(elem.id);
-  
-  //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
   var autocomplete = new google.maps.places.Autocomplete(input);
   autocomplete.bindTo('bounds', map);
 
@@ -65,6 +59,7 @@ function search(elem){
     animation: google.maps.Animation.DROP
 
   });
+  
   var place;
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
     infowindow.close();
@@ -75,10 +70,8 @@ function search(elem){
     places[elem.id]={
       place: place.geometry.location,
       marker: marker
-      };
-    console.log(place.name+','+place.formatted_address);
-    //console.log(places['source']);
-    
+    };
+       
     var regex= /^waypoint-?/;
     
     if(regex.test(elem.id)){
@@ -90,24 +83,20 @@ function search(elem){
       console.log(waypoints);
       count++;
       document.getElementById('waypoint_button').disabled=false;
-      if(count===8){
-        document.getElementById('waypoint_button').disabled=true;
-      }
-    return;
+      if(count===8)
+         document.getElementById('waypoint_button').disabled=true;
+      return;
     }
 
     if (!place.geometry)
       return;
-        
     if (place.geometry.viewport)                    // If the place has a geometry, then present it on a map.
       map.fitBounds(place.geometry.viewport);
     else 
       map.setCenter(place.geometry.location);
-     
-   
+      
     markers.push(marker);
     
-
     var address = '';
     if (place.address_components) {
       address = [
@@ -118,20 +107,15 @@ function search(elem){
     }
 
     infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-    infowindow.open(map, marker);
+    //infowindow.open(map, marker);
   });
 }
 
 function getdirections(){
-  console.log("button clicked");
-  console.log(waypoints);
-  //console.log(places['destination']);
-
   
-
   var request = {
-      origin:places['source'].place,
-      destination:places['destination'].place,
+      origin:places['source'].marker.getPosition(),
+      destination:places['destination'].marker.getPosition(),
       travelMode: google.maps.TravelMode.DRIVING,
       provideRouteAlternatives: false,
       waypoints:waypoints
