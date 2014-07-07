@@ -89,14 +89,19 @@
 
     </head>
   <body>
-    <form id="form" style="padding:10px">
-    
-    <input id="source" class="controls" type="text" placeholder="Enter a source" size="45" onclick="search(this)" onfocus="search(this)">
-
-    <button id="button"type="button" class="controls" onclick="addwaypoint(this)">Add Waypoint</button><br>
-    <input id="destination" class="controls" type="text" placeholder="Enter a destination" size="45" onclick="search(this)" onfocus="search(this)"><br>
-    <button type="button" class="controls" onclick="getdirections()">Get Directions</button><br>
-    </form>
+    <div id="input" style="left:10px">
+      <form id="form" style="padding:10px">
+      
+      <input id="source" class="controls" type="text" placeholder="Enter a source" size="45" onclick="search(this)" onfocus="search(this)">
+  
+      <button id="waypoint_button"type="button"  onclick="addwaypoint(this)">Add Waypoint</button><br>
+      <input id="destination" class="controls" type="text" placeholder="Enter a destination" size="45" onclick="search(this)" onfocus=" search(this)"><br>
+      <button type="button" class="controls" onclick="getdirections()">Create Route</button>
+      <button type="button" id="reset_button" class="controls" onclick="reset_route();reset()" style="visibility:hidden">Reset</button><br>
+      <input id="stops" class="controls" onclick="addstops(this)" placeholder="Add stops" size="40" type="text">
+      </form>
+      
+    </div>
     <div id="map-canvas"></div>
     <div id="directions-panel"></div>
     <!-- <table id="table" style="width:300px">
