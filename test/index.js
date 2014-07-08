@@ -22,6 +22,13 @@ function initialize() {
       position: google.maps.ControlPosition.RIGHT_BOTTOM
     }
   }
+
+ angular.module('plunker', ['ui.bootstrap']);
+ var PopoverDemoCtrl = function ($scope) {
+  $scope.dynamicPopover = 'Hello, World!';
+  $scope.dynamicPopoverTitle = 'Title';
+ };
+
   map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
   
   if(navigator.geolocation) 
@@ -45,6 +52,8 @@ function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
   directionsDisplay.setMap(map);
 }
+
+
 
 function search(elem){
   

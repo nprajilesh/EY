@@ -13,8 +13,9 @@
   <script src="markerwithlabel.js" type="text/javascript"></script>
   <script type="text/javascript" src="http://localhost:3000/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="index2.js"></script>
-  <script type="text/javascript" src="jquery_easing.js"></script>
-  <script type="text/javascript" src="markerAnimate.js"></script>
+  <script type="text/javascript" src="js/jquery_easing.js"></script>
+  <script type="text/javascript" src="js/markerAnimate.js"></script>
+  <script type="text/javascript" src="js/ui-bootstrap-tpls-0.11.0.min.js"></script>
  
   <style type="text/css">
     @import url(http://fonts.googleapis.com/css?family=Droid+Sans);
@@ -30,42 +31,48 @@
 
 
    <script>
-    var app = angular.module('details',[]);
+    var app = angular.module('details',['ui.bootstrap']);
     app.controller('DetailsController',function($scope,$log){
+      $scope.clicked_bus =0;
       $scope.empList={};
+      $scope.clickUpdate = function(data)
+      {
+        console.log(data.contentinfo);
+        $scope.clicked_bus = 1;
+        $scope.updateFn();
+      };
+      
       $scope.updateFn=function(data)
       {
         $scope.empList=data;
         $scope.$digest();
-      }
+      };
     });
+
+
   </script>
   <link href="index.css" rel="stylesheet" type="text/css" />
 </head>
 <body onload="init()">
  <div class="col-md-12 header">
             <h3>REALTIME TRACKING SYSTEM - TRIVANDRUM</h3>
-<input id="autocomplete" type="text" placeholder="search places" >
-
  </div>
         <div id="map_canvas" class="col-md-12"></div>
 
- <div id="panel" class="panel panel-primary col-md-3">
-            <div class="panel-heading">Dashboard</div>
-               <div id="app-angular" ng-controller="DetailsController">
-                    Lat      : {{empList.lat}}
-                    <br/>
-                    long     : {{empList.lng}}
-                    <br/>
-                    route    : {{empList.ID}}
+<div id="hideclick" ng-controller="DetailsController" >
+ <div id="panel"  ng-if="clicked_bus" class="panel-primary col-md-3" >
+            <div  class="panel-heading">Dashboard</div>
+               <div id="app-angular"   >
+                    route    : {{empList.uid}}
                     <br/>
                     employee : 
                             <ul>
-                            <li ng-repeat ="person in empList.emp "> {{person}}</li>
+                            <li ng-repeat ="person in empList.contentinfo "> {{person}}</li>
                             </ul>
                     </br>
                     time     : {{empList.time}}
             </div>
+  </div>
   </div>
 
    </body>

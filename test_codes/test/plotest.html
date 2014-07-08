@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Complex Polylines</title>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    
+    <script type="text/javascript">
+
+     var socket = io.connect('http://localhost:3000/');
+
+     socket.on('connect', function(data){
+
+       setStatus('connected');
+       socket.emit('subscribe', {channel:'realtime'});
+     });
+
+     socket.on('reconnecting', function(data){
+       setStatus('reconnecting');
+     });
+
+     socket.on('message', function (data) {
+       console.log('received a message: ', data);
+       addMessage(data);
+     });
+
+     function addMessage(data) {
+        var path = poly.getPath();
+
+        ll= new google.maps.LatLng(data.lat,data.lng);
+          // Because path is an MVCArray, we can simply append a new coordinate
+          // and it will automatically appear.
+                path.push(ll);
+        
+          // Add a new marker at the new plotted point on the polyline.
+          var marker = new google.maps.Marker({
+            position: ll,
+            title: '#' + path.getLength(),
+            map: map
+          });
+      disp(data);
+     }
+
+     function setStatus(msg) {
+         console.log('Connection Status : ' + msg);
+     }
+
+
+     </script>
+
+
+
+
+
+
+
+    <script>
+// This example creates an interactive map which constructs a
+// polyline based on user clicks. Note that the polyline only appears
+// once its path property contains two LatLng coordinates.
+
+var poly;
+var map;
+
+function initialize() {
+  var mapOptions = {
+    zoom: 5,
+    // Center the map on Chicago, USA.
+    center: new google.maps.LatLng(76.870411149254153,8.5719747380371736)
+  };
+
+  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+  var polyOptions = {
+    strokeColor: '#000000',
+    strokeOpacity: 1.0,
+    strokeWeight: 3
+  };
+  poly = new google.maps.Polyline(polyOptions);
+  poly.setMap(map);
+
+  // Add a listener for the click event
+ // google.maps.event.addListener(map, 'click', addLatLng);
+}
+
+/**
+ * Handles click events on a map, and adds a new point to the Polyline.
+ * @param {google.maps.MouseEvent} event
+ */
+function addLatLng(event) {
+
+  var path = poly.getPath();
+
+  // Because path is an MVCArray, we can simply append a new coordinate
+  // and it will automatically appear.
+  path.push(event.latLng);
+
+  // Add a new marker at the new plotted point on the polyline.
+  var marker = new google.maps.Marker({
+    position: event.latLng,
+    title: '#' + path.getLength(),
+    map: map
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>

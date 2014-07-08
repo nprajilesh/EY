@@ -6,7 +6,6 @@ var autocomplete;
 var uid;
 var markersarr = {};
 var vehicles = {};
-var vehicle_id= -1;
 
 function init()
 {
@@ -22,15 +21,13 @@ function init()
 
     socket.on('realtime', function (data) {
      	console.log(data);
+   		angular.element("#app-angular").scope().updateFn(data);
    	    updatevehicle(data);
-   		angular.element("#hideclick").scope().updateFn(vehicles[vehicle_id]);
- 
     });
 
     createmap();
-     
+    placelist();   
 }
-
 
 
 function createmap()
@@ -57,6 +54,18 @@ var polyOptions = {
   poly.setMap(map);
 }
 
+
+function placelist()
+{
+	var start = document.getElementById('start');
+	var end = document.getElementById('end');
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(start);
+    autocomplete = new google.maps.places.Autocomplete(start);
+    autocomplete.bindTo('bounds', map);
+    google.maps.event.addListener(autocomplete, 'place_changed',onPlaceChanged);
+}
+
+
 function updatevehicle(data)
 {
 	var point = new google.maps.LatLng(data.lat, data.lng);
@@ -65,7 +74,6 @@ function updatevehicle(data)
 		vehicles[uid] = createvehicle(data,point);
 	else
 	{
-		vehicles[uid].contentinfo = data.emp;
 		markersarr[uid].animateTo(point,{ 
 			easing : "linear",
 			duration : 1000,
@@ -74,6 +82,7 @@ function updatevehicle(data)
 	}
 	path = poly.getPath();
 	path.push(point);
+	console.log('*****************************'+point);
 }
 
 function createvehicle(data,point)
@@ -102,8 +111,6 @@ function createvehicle(data,point)
 
   	google.maps.event.addListener(markersarr[uid], 'click', function() {
   		showroute(this);
-  		vehicle_id=this.id;
-  		angular.element("#hideclick").scope().clickUpdate(vehicles[this.id]);
   	});
 
   	url = 'http://ec2-54-81-137-234.compute-1.amazonaws.com/gtfs/trivroute'+data.ID+'.kml'
@@ -114,18 +121,33 @@ function createvehicle(data,point)
 		map : map
 	});
 
-  //	content = JSON.stringify(data.emp);
+  	content = JSON.stringify(data.emp);
 	return {
 		uid : uid,
 		marker : newmarker,
 		route : routelayer,
-		contentinfo : data.emp,
-		headingTo : uid
-
+		contentinfo : content
 
 	}
 
 }
+
+function onPlaceChanged()
+ {	    
+		    var place = autocomplete.getPlace();
+		    if (!place.geometry) 
+		      return;
+
+		    // If the place has a geometry, then present it on a map.
+		    if (place.geometry.viewport) 
+		    	  map.fitBounds(place.geometry.viewport);
+		    else 
+		    {
+			      map.setCenter(place.geometry.location);
+			      map.setZoom(17);  // Why 17? Because it looks good.
+		    }  
+}
+
 
 function showroute(data)
 {
