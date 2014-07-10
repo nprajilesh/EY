@@ -83,28 +83,27 @@
 }
 
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places,geometry&sensor=false"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries==geometry,places&sensor=false"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="index.js"></script>
-
 
     </head>
   <body>
     <div id="input" style="left:10px">
       <form id="form" style="padding:10px">
       
-      <input id="source" class="controls" type="text" placeholder="Enter a source" size="45" onclick="search(this)" onfocus="search(this)">
+      <input id="source" class="controls" type="text" placeholder="Enter a source" size="45" onclick="search(this);reset()" onfocus="search(this)">
   
-      <button id="waypoint_button"type="button"  onclick="addwaypoint(this)">Add Waypoint</button><br>
-      <input id="destination" class="controls" type="text" placeholder="Enter a destination" size="45" onclick="search(this)" onfocus=" search(this)"><br>
-      <button type="button" id="createbutton" class="controls" onclick="getdirections()">Create Route</button>
-      <button type="button" id="reset_button" class="controls" onclick="reset_route();reset()" style="visibility:hidden">Reset</button><br>
-      <input id="stops" class="controls" onclick="addstops(this)" placeholder="Add stops" size="40" type="text">
-       <br><button type="button" id="showroute" class="controls" onclick="disp_route()" >show</button><br>
+      <button id="waypoint_button" type="button" class="controls" onclick="addwaypoint(this)">Add Waypoint</button><br>
+      <input id="destination" class="controls" type="text" placeholder="Enter a destination" size="45" onclick="search(this);reset()" onfocus=" search(this)"><br>
+      <button type="button" class="controls" onclick="getdirections()">Create Route</button>
+      <button type="button" id="reset_button" class="controls" onclick="reset_route()" style="visibility:hidden">Reset</button><br>
+      <input id="stops" class="controls" onclick="addstops(this);reset()" placeholder="Add stops" size="40" type="text">
+      <br><button type="button" class="controls" onclick="loadroute()">Load Route</button>
       </form>
       
     </div>
     <div id="map-canvas"></div>
     <div id="directions-panel"></div>
-     </body>
+  </body>
 </html>
