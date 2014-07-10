@@ -107,15 +107,14 @@ function createvehicle(data,point)
   	});
 
   	url = 'http://ec2-54-81-137-234.compute-1.amazonaws.com/gtfs/trivroute'+data.ID+'.kml'
-  	console.log(url);
+ // 	console.log(url);
   	var routelayer = new google.maps.KmlLayer({
 		url : url,
 		preserveViewport : true,
 		map : map
 	});
 
-  //	content = JSON.stringify(data.emp);
-	return {
+ 	return {
 		uid : uid,
 		marker : newmarker,
 		route : routelayer,

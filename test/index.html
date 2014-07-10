@@ -83,12 +83,10 @@
 }
 
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places,geometry&sensor=false"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="index.js"></script>
-      <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
- 
+
 
     </head>
   <body>
@@ -99,25 +97,14 @@
   
       <button id="waypoint_button"type="button"  onclick="addwaypoint(this)">Add Waypoint</button><br>
       <input id="destination" class="controls" type="text" placeholder="Enter a destination" size="45" onclick="search(this)" onfocus=" search(this)"><br>
-      <button type="button" class="controls" onclick="getdirections()">Create Route</button>
+      <button type="button" id="createbutton" class="controls" onclick="getdirections()">Create Route</button>
       <button type="button" id="reset_button" class="controls" onclick="reset_route();reset()" style="visibility:hidden">Reset</button><br>
       <input id="stops" class="controls" onclick="addstops(this)" placeholder="Add stops" size="40" type="text">
+       <br><button type="button" id="showroute" class="controls" onclick="disp_route()" >show</button><br>
       </form>
       
     </div>
     <div id="map-canvas"></div>
     <div id="directions-panel"></div>
-    <!-- <table id="table" style="width:300px">
-      <tr>
-      <td>Jill</td>
-      <td>Smith</td>    
-      <td>50</td>
-      </tr>
-      <tr>
-        <td>Eve</td>
-        <td>Jackson</td>    
-        <td>94</td>
-      </tr>
-    </table> -->
-  </body>
+     </body>
 </html>
