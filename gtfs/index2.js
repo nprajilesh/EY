@@ -10,7 +10,7 @@ var vehicle_id= -1;
 
 function init()
 {
-	
+
 	var socket = io.connect('http://localhost:3000/');
 
 	socket.on('connect', function(data){
@@ -47,14 +47,6 @@ function createmap()
              content: 'holding...'
         });	
 
-
-var polyOptions = {
-    strokeColor: '#428CCC',
-    strokeOpacity: 1.0,
-    strokeWeight: 3
-	  };
-  poly = new google.maps.Polyline(polyOptions);
-  poly.setMap(map);
 }
 
 function updatevehicle(data)
@@ -72,7 +64,7 @@ function updatevehicle(data)
 			complete : function(){}
 		});
 	}
-	path = poly.getPath();
+	path = vehicles[uid].polyline.getPath();
 	path.push(point);
 }
 
@@ -89,7 +81,7 @@ function createvehicle(data,point)
 
 	newmarker.setTitle(toString(uid));
 	markersarr[uid]=newmarker;
-	google.maps.event.addListener(markersarr[uid], 'mouseover', function() {
+	/*google.maps.event.addListener(markersarr[uid], 'mouseover', function() {
 
     	infowindow.setContent(JSON.stringify(data.emp));
     	infowindow.open(map,this);
@@ -98,28 +90,34 @@ function createvehicle(data,point)
     google.maps.event.addListener(markersarr[uid], 'mouseout', function() {
 
      		infowindow.close();       	
-    });
+    });*/
 
   	google.maps.event.addListener(markersarr[uid], 'click', function() {
   		showroute(this);
   		vehicle_id=this.id;
   		angular.element("#hideclick").scope().clickUpdate(vehicles[this.id]);
   	});
-
-  	url = 'http://ec2-54-81-137-234.compute-1.amazonaws.com/gtfs/trivroute'+data.ID+'.kml'
- // 	console.log(url);
+  	
   	var routelayer = new google.maps.KmlLayer({
-		url : url,
 		preserveViewport : true,
 		map : map
 	});
+
+			var polyOptions = {
+		    strokeColor: '#428CCC',
+		    strokeOpacity: 1.0,
+		    strokeWeight: 3
+			  };
+		  poly = new google.maps.Polyline(polyOptions);
+		  poly.setMap(map);
 
  	return {
 		uid : uid,
 		marker : newmarker,
 		route : routelayer,
 		contentinfo : data.emp,
-		headingTo : uid
+		headingTo : uid,
+		polyline:poly
 
 
 	}
