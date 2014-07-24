@@ -2,15 +2,20 @@ var rendererOptions;
 var directionsDisplay;
 var directionsService;
 var waypoints=[];
+var stop_id=0;
 var count=0;
 var inputc=1;
-var stops={};
+var stops=[];
+var route={};
 var places={};
 var markers=[];
 var pos;
+var stop_nam;
 var cordinates=[];
+var route_response;
 var map;
 var polystr;
+var polyline_dynamic;
 google.maps.event.addDomListener(window, 'load', initialize);
 
 
@@ -40,6 +45,10 @@ function initialize() {
     
   var input = document.getElementById('input');
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+  var stop_details=document.getElementById('stop_details'); 
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(stop_details);
+  document.getElementById('stop_details').style.display = "none"; 
      
   rendererOptions = {
     map: map,
@@ -51,7 +60,7 @@ function initialize() {
 }
 
 
-
+/*Select start and destination */
 function search(elem){
   
   var input = document.getElementById(elem.id);
@@ -77,6 +86,8 @@ function search(elem){
       place: place.geometry.location,
       marker: marker
     };
+
+
        
     var regex= /^waypoint-?/;
     
@@ -134,7 +145,8 @@ function getdirections(){
       document.getElementById('reset_button').style.visibility="visible";
       places['source'].marker.setMap(null);
       places['destination'].marker.setMap(null);
-      inserttodb(response);
+      route_response=response;
+    // inserttodb(response);
     }
   });
 }
@@ -157,6 +169,7 @@ function addstops(elem){
   var autocomplete = new google.maps.places.Autocomplete(input);
   autocomplete.bindTo('bounds', map);
 
+
   var marker = new google.maps.Marker({
     map:map,
     draggable:true,
@@ -165,28 +178,37 @@ function addstops(elem){
 
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
     var place = autocomplete.getPlace();
+    console.log(place);
+    document.getElementById('stop_details').style.display = "block";
     marker.setVisible(false);
-
     if (!place.geometry)
       return;
     
+
     if (place.geometry.viewport) 
       map.fitBounds(place.geometry.viewport);
 
     marker.setPosition(place.geometry.location);
     marker.setVisible(true);
+    document.getElementById('reset_button').style.visibility="visible";
     });
+    input.value="";
+    input.placeholder="Add stops";
+   
 }
 
 /* Resets the markers and Wave Points*/
 function reset_route(){
   directionsDisplay.setMap(null);
+  if(polyline_dynamic)
+      polyline_dynamic.setMap(null);
   places={};
   waypoints=[];
   for(var i=0; i<markers.length; i++)
     markers[i].setMap(null);
   markers=[];
   document.getElementById("reset_button").style.visibility="hidden";
+  document.getElementById('stop_details').style.display = "none"; 
   map.setCenter(pos);
   map.setZoom(10);
 }
@@ -198,7 +220,7 @@ function inserttodb(response){
     $.ajax({
       type: 'POST',
       url: 'http://192.168.0.175:1337/shapes/create',
-      data: {shape_id:'1',route:response.routes[0].overview_polyline},
+      data: {shape_id:'20',route:response.routes[0].overview_polyline},
       dataType: 'json',
       success: function(data) { 
         alert('Route Created Sucessfully '); 
@@ -213,26 +235,35 @@ function loadroute(){
   $.ajax({
       type: 'POST',
       url: 'http://192.168.0.175:1337/shapes/findbyid',
-      data: {id:2},
+      data: {id:20},
       dataType: 'json',
       success: function(data) { 
        
         console.log(data);
         var decpoly = google.maps.geometry.encoding.decodePath(data.route);
         console.log(decpoly);
-        var polyline= new google.maps.Polyline({map:map,path:decpoly}); 
+        polyline_dynamic = new google.maps.Polyline({map:map,path:decpoly,polyline_style:2}); 
+         document.getElementById('reset_button').style.visibility="visible";
         // and this is where we actually draw it. 
-        var polyOptions = { 
-          path: pathCoordinates, 
-          strokeColor: '#ff0000', 
-          strokeOpacity: 1.0, 
-          strokeWeight: 1 
-        };
-        poly = new google.maps.Polyline(polyOptions); 
-        poly.setMap(map);
-        console.log(data); 
+      
       },
       error: function() { alert('something bad happened'); }
     });
     
+}
+
+function addstop()
+{
+    var id=document.getElementById('stop_id');
+    var time=document.getElementById('stop_time');
+    var desc=document.getElementById('stop_desc');
+//    stops[stop_id++] = {stopid:id,time:time,desc:desc,name:}
+
+
+
+}
+
+function submit_route()
+{
+
 }

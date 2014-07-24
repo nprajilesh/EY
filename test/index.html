@@ -100,9 +100,24 @@
       <button type="button" id="reset_button" class="controls" onclick="reset_route()" style="visibility:hidden">Reset</button><br>
       <input id="stops" class="controls" onclick="addstops(this);reset()" placeholder="Add stops" size="40" type="text">
       <br><button type="button" class="controls" onclick="loadroute()">Load Route</button>
+       <br><button type="button" class="controls" onclick="submit_route()">Submit Route</button>
       </form>
       
     </div>
+
+   <div id="stop_details" style="right:10px"  >
+      <form id="stop_form" style="padding:10px">
+      
+      <input id="stop_time" class="controls"  required type="text" placeholder="Enter Time" size="45" >
+      </br>
+       <input id="stop_desc" class="controls" type="text" placeholder="Stop Description" size="45" >
+       </br>
+        <button type="button" onclick="addstop()" style="margin : 10px 0":>Submit </button>
+      </form>
+ </div>     
+
+
+
     <div id="map-canvas"></div>
     <div id="directions-panel"></div>
   </body>
