@@ -8,6 +8,20 @@ var markersarr = {};
 var vehicles = {};
 var vehicle_id= -1;
 
+var app = angular.module('details',['ui.bootstrap']);
+app.controller('DetailsController',function($scope,$log)
+{
+   $scope.empList={};
+   $scope.updateFn=function(data)
+   {
+     $scope.empList=data;
+     $scope.$digest();
+   };
+ });
+
+
+
+
 function init()
 {
 

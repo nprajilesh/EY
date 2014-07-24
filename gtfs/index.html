@@ -28,35 +28,38 @@
   }
  td{
      text-align: center;
+     width:10%;
   }
-  .stop_remaining
+  .stop_visited 
   {
-      color: #31708f;
-      background-color: #d9edf7;
-      border-color: #bce8f1;
+      color: #3c763d;
+      background-color: #dff0d8;
+      border-color: #d6e9c6;
   }
-   .stop_visited 
+   .stop_remaining
   {
       color: #a94442;
       background-color: #f2dede;
       border-color: #ebccd1;
   }
+  .tablestyle
+  {
+    margin-bottom:0px;
+  }
+  .panel_head_style
+  {
+    text-align: center;
+  }
+  .thead_style
+  {
+      color: #2c3e50;
+      background-color:#ecf0f1;
+      border-color: #95a5a6;
+  }
  
 </style>
 
 
-<script>
-     var app = angular.module('details',['ui.bootstrap']);
- app.controller('DetailsController',function($scope,$log){
-   $scope.empList={};
-   $scope.updateFn=function(data)
-   {
-     $scope.empList=data;
-     $scope.$digest();
-   };
- });
-
-</script>
 <link href="index.css" rel="stylesheet" type="text/css" />
 </head>
 <body onload="init()">
@@ -65,18 +68,22 @@
  </div>
         <div id="map_canvas" class="col-md-12"></div>
 
-<div id="hideclick" class="panel panel-info" ng-controller="DetailsController" style="margin-right:10px;padding:5px">
-           <div  id="app-angular" class="panel-heading">Trip Id : {{empList.trip_id}}</div>
-                     <table class="table table-stripped">
-                                
-                                <thead>
+<div id="hideclick" class="panel panel-info " ng-controller="DetailsController" style="margin-right:10px;width:270px">
+           <div  id="app-angular" class="panel-heading panel_head_style">Trip Id : {{empList.trip_id}}
+           </div>
+             <tabset justified="true">
+                <tab heading="Vehicle Status">
+                  <table class="table tablestyle" style="table-layout:fixed;border:3px">        
+                                <thead class="thead_style">
                                     <tr>
                                     <th>Stop Name </th>
                                     <th>Expected time </th>
                                     <th>Actual Time </th>
                                     </tr>
                                  </thead> 
-                           
+                    </table>
+                    <div style="overflow-y:auto;height:300px">
+                      <table class="table tablestyle" style="table-layout:fixed">    
                                   <tbody >
                                         <tr ng-repeat ="stop in empList.stops_visited" class="stop_visited" >
                                               <td style="text-align: left">{{stop.place}}</td>
@@ -89,15 +96,23 @@
                                               <td>{{stop.arr_time}}</td>
                                         </tr>
                                   </tbody>
-                    </table>
-            
-                <div>
-                    <br>
+                      </table>
+                    </div>
+                </tab>
+
+                <tab heading="Employee Details">
+                 <div>
                     employee : 
                             <ul>
                             <li ng-repeat ="person in empList.emp"> {{person}}</li>
                             </ul>
-                 </div>            
+                    </div>  
+                </tab>
+      
+            </tabset>
+                    
+            
+                              
             
   </div>
 
