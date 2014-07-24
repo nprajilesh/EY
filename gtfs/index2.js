@@ -7,6 +7,7 @@ var uid;
 var markersarr = {};
 var vehicles = {};
 var vehicle_id= -1;
+var vehicle_selected;
 
 var app = angular.module('details',['ui.bootstrap']);
 app.controller('DetailsController',function($scope,$log)
@@ -28,17 +29,16 @@ function init()
 	var socket = io.connect('http://localhost:3000/');
 
 	socket.on('connect', function(data){
-	    socket.emit('subscribe', {channel:'realtime'});
-    });
+		console.log('web socket connected');
+	});
 
     socket.on('reconnecting', function(data){
     });
 
     socket.on('realtime', function (data) {
-    		console.log(data);
-   	 		updatevehicle(data);
+    	console.log(data);
+   	 	updatevehicle(data);
    		angular.element("#hideclick").scope().updateFn(data.det);
- 
     });
 
     createmap();
@@ -59,9 +59,6 @@ function createmap()
 			mapTypeId : google.maps.MapTypeId.ROADMAP
 		};
 	map = new google.maps.Map(map_canvas, myOptions);
-	infowindow = new google.maps.InfoWindow({
-             content: 'holding...'
-        });	
 
 }
 
@@ -98,38 +95,22 @@ function createvehicle(data,point)
 	newmarker.setTitle(toString(uid));
 	markersarr[uid]=newmarker;
   	google.maps.event.addListener(markersarr[uid], 'click', function() {
-  		showroute(this);
-  		vehicle_id=this.id;
+  		socket.emit('click',this.id);			//send the trip id through socket
+  		vehicle_selected=this.id;				//set the trip id of selected vehicle
   	 document.getElementById('hideclick').style.display = "block";
   	});
   	
-  	var routelayer = new google.maps.KmlLayer({
-		preserveViewport : true,
-		map : map
-	});
-
-			var polyOptions = {
-		    strokeColor: '#428CCC',
-		    strokeOpacity: 1.0,
-		    strokeWeight: 3
-			  };
-		  poly = new google.maps.Polyline(polyOptions);
-		  poly.setMap(map);
+  	var polyOptions = {
+		strokeColor: '#428CCC',
+		strokeOpacity: 1.0,
+		strokeWeight: 3
+	};
+	poly = new google.maps.Polyline(polyOptions);
+	poly.setMap(map);
 
  	return {
 		uid : uid,
 		marker : newmarker,
-		route : routelayer,
-		contentinfo : data.emp,
-		headingTo : uid,
 		polyline:poly
-
-
 	}
-
-}
-
-function showroute(data)
-{
-	
 }
