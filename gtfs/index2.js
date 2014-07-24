@@ -21,14 +21,16 @@ function init()
     });
 
     socket.on('realtime', function (data) {
-     	console.log(data);
-   	    updatevehicle(data);
-   		angular.element("#hideclick").scope().updateFn(vehicles[vehicle_id]);
+    		console.log(data);
+   	 		updatevehicle(data);
+   		angular.element("#hideclick").scope().updateFn(data.det);
  
     });
 
     createmap();
-     
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById('hideclick'));
+    document.getElementById("hideclick").style.display="none"; 
+
 }
 
 
@@ -51,8 +53,8 @@ function createmap()
 
 function updatevehicle(data)
 {
-	var point = new google.maps.LatLng(data.lat, data.lng);
-	uid = data.ID;
+	var point = new google.maps.LatLng(data.position.lat, data.position.lng);
+	uid = data.trip_id;
 	if(!(uid in markersarr))
 		vehicles[uid] = createvehicle(data,point);
 	else
@@ -81,21 +83,10 @@ function createvehicle(data,point)
 
 	newmarker.setTitle(toString(uid));
 	markersarr[uid]=newmarker;
-	/*google.maps.event.addListener(markersarr[uid], 'mouseover', function() {
-
-    	infowindow.setContent(JSON.stringify(data.emp));
-    	infowindow.open(map,this);
-    });
-
-    google.maps.event.addListener(markersarr[uid], 'mouseout', function() {
-
-     		infowindow.close();       	
-    });*/
-
   	google.maps.event.addListener(markersarr[uid], 'click', function() {
   		showroute(this);
   		vehicle_id=this.id;
-  		angular.element("#hideclick").scope().clickUpdate(vehicles[this.id]);
+  	 document.getElementById('hideclick').style.display = "block";
   	});
   	
   	var routelayer = new google.maps.KmlLayer({
@@ -126,5 +117,5 @@ function createvehicle(data,point)
 
 function showroute(data)
 {
-	vehicles[data.id].route.setMap(map);
+	
 }

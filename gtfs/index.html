@@ -1,56 +1,63 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="details">
 <head>
-  <title>TEST</title>
-  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-  <meta name="viewport" content="width=500">
-   <link href="css/bootstrap/bootstrap.css" rel="stylesheet" type="text/css" />
-   <link href="css/reset.css" rel="stylesheet" type="text/css" />
-   <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>  
- <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false"></script>
-  <script src="markerwithlabel.js" type="text/javascript"></script>
-  <script type="text/javascript" src="http://localhost:3000/socket.io/socket.io.js"></script>
-  <script type="text/javascript" src="index2.js"></script>
-  <script type="text/javascript" src="js/jquery_easing.js"></script>
-  <script type="text/javascript" src="js/markerAnimate.js"></script>
-  <script type="text/javascript" src="js/ui-bootstrap-tpls-0.11.0.min.js"></script>
+<title>TEST</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=500">
+<link href="css/reset.css" rel="stylesheet" type="text/css" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>  
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false"></script>
+<script type="text/javascript" src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="js/ui-bootstrap-tpls-0.11.0.min.js"></script>
+<script type="text/javascript" src="js/jquery_easing.js"></script>
+<script type="text/javascript" src="js/markerAnimate.js"></script>
+<script type="text/javascript" src="index2.js"></script>
  
-  <style type="text/css">
-    @import url(http://fonts.googleapis.com/css?family=Droid+Sans);
-          #map_canvas
-        {
-            height: 88%;
-        }
-        #autocomplete
-        {
-          width: 25%;
-        }
- </style>
+<style type="text/css">
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans);
+   #map_canvas
+   {
+       height: 88%;
+   }
+  #autocomplete
+  {
+     width: 25%;
+  }
+ td{
+     text-align: center;
+  }
+  .stop_remaining
+  {
+      color: #31708f;
+      background-color: #d9edf7;
+      border-color: #bce8f1;
+  }
+   .stop_visited 
+  {
+      color: #a94442;
+      background-color: #f2dede;
+      border-color: #ebccd1;
+  }
+ 
+</style>
 
 
-   <script>
-    var app = angular.module('details',['ui.bootstrap']);
-    app.controller('DetailsController',function($scope,$log){
-      $scope.clicked_bus =0;
-      $scope.empList={};
-      $scope.clickUpdate = function(data)
-      {
-        console.log(data.contentinfo);
-        $scope.clicked_bus = 1;
-      };
-      
-      $scope.updateFn=function(data)
-      {
-        $scope.empList=data;
-        $scope.$digest();
-      };
-    });
+<script>
+     var app = angular.module('details',['ui.bootstrap']);
+ app.controller('DetailsController',function($scope,$log){
+   $scope.empList={};
+   $scope.updateFn=function(data)
+   {
+     $scope.empList=data;
+     $scope.$digest();
+   };
+ });
 
-
-  </script>
-  <link href="index.css" rel="stylesheet" type="text/css" />
+</script>
+<link href="index.css" rel="stylesheet" type="text/css" />
 </head>
 <body onload="init()">
  <div class="col-md-12 header">
@@ -58,22 +65,40 @@
  </div>
         <div id="map_canvas" class="col-md-12"></div>
 
-<div id="hideclick" ng-controller="DetailsController" >
- <div id="panel"  ng-if="clicked_bus" class="panel-primary col-md-3" >
-            <div  class="panel-heading">Dashboard</div>
-               <div id="app-angular"   >
-                    route    : {{empList.uid}}
-                    <br/>
+<div id="hideclick" class="panel panel-info" ng-controller="DetailsController" style="margin-right:10px;padding:5px">
+           <div  id="app-angular" class="panel-heading">Trip Id : {{empList.trip_id}}</div>
+                     <table class="table table-stripped">
+                                
+                                <thead>
+                                    <tr>
+                                    <th>Stop Name </th>
+                                    <th>Expected time </th>
+                                    <th>Actual Time </th>
+                                    </tr>
+                                 </thead> 
+                           
+                                  <tbody >
+                                        <tr ng-repeat ="stop in empList.stops_visited" class="stop_visited" >
+                                              <td style="text-align: left">{{stop.place}}</td>
+                                              <td>{{stop.sh_time}}</td>
+                                              <td>{{stop.arr_time}}</td>
+                                        </tr>                 
+                                        <tr ng-repeat ="stop in empList.stops_rem" class="stop_remaining">
+                                              <td style="text-align: left">{{stop.place}}</td>
+                                              <td>{{stop.sh_time}}</td>
+                                              <td>{{stop.arr_time}}</td>
+                                        </tr>
+                                  </tbody>
+                    </table>
+            
+                <div>
+                    <br>
                     employee : 
                             <ul>
-                            <li ng-repeat ="person in empList.contentinfo "> {{person}}</li>
+                            <li ng-repeat ="person in empList.emp"> {{person}}</li>
                             </ul>
-                    </br>
-            </div>
-             <div id="vehicle_timetable_container">
-             
-             </div>
-  </div>
+                 </div>            
+            
   </div>
 
    </body>
