@@ -2,20 +2,18 @@ var rendererOptions;
 var directionsDisplay;
 var directionsService;
 var waypoints=[];
-var stop_id=0;
 var count=0;
 var inputc=1;
-var stops=[];
-var route={};
+var stops={};
 var places={};
 var markers=[];
+var markerid;
 var pos;
-var stop_nam;
 var cordinates=[];
-var route_response;
 var map;
 var polystr;
-var polyline_dynamic;
+var waymarkers=[];
+
 google.maps.event.addDomListener(window, 'load', initialize);
 
 
@@ -45,22 +43,44 @@ function initialize() {
     
   var input = document.getElementById('input');
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-  var stop_details=document.getElementById('stop_details'); 
-  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(stop_details);
-  document.getElementById('stop_details').style.display = "none"; 
-     
+  
   rendererOptions = {
     map: map,
     draggable: true
-    };
+  };
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
   directionsDisplay.setMap(map);
+
+  /*var sourcedat=[];
+  $.ajax({
+    type:'POST',
+    url: "http://192.168.0.175:1337/stops/find",
+    dataType: "json",
+    data: {},
+    success: function(data) {
+      console.log(data);
+      sourcedat = $.map(data, function(item) {
+        return {
+          label: item.stop_name,
+          id: item.id,
+        };
+      });
+      console.log(sourcedat);
+      $("#stops").autocomplete({
+        source: sourcedat,
+        minLength: 0,
+        select: function(event, ui) {
+          //$('#stop_id').val(ui.item.id);
+        }
+      });
+    }
+  });*/
+
 }
 
 
-/*Select start and destination */
+
 function search(elem){
   
   var input = document.getElementById(elem.id);
@@ -72,11 +92,10 @@ function search(elem){
     map: map,
     draggable:true,
     animation: google.maps.Animation.DROP
-
   });
   
-   var place;
-    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+  var place;
+  google.maps.event.addListener(autocomplete, 'place_changed', function() {
     infowindow.close();
     marker.setVisible(false);
     place = autocomplete.getPlace();
@@ -86,16 +105,11 @@ function search(elem){
       place: place.geometry.location,
       marker: marker
     };
-
-
        
     var regex= /^waypoint-?/;
     
     if(regex.test(elem.id)){
-      waypoints.push({
-          location:place.formatted_address,
-          stopover:false
-      });
+      waymarkers.push(marker);
       count++;
       document.getElementById('waypoint_button').disabled=false;
       if(count===8)
@@ -111,7 +125,7 @@ function search(elem){
       map.setCenter(place.geometry.location);
       
     markers.push(marker);
-    
+    document.getElementById('reset_button').style.visibility="visible";
     var address = '';
     if (place.address_components) {
       address = [
@@ -129,26 +143,64 @@ function search(elem){
 /* Route details are obtained by direction Service API*/
 function getdirections(){
   
+  for(m in waymarkers){
+    waypoints.push({
+          location:waymarkers[m].getPosition(),
+          stopover:false
+      });
+  }
+    
+
   var request = {
       origin:places['source'].marker.getPosition(),
       destination:places['destination'].marker.getPosition(),
       travelMode: google.maps.TravelMode.DRIVING,
       provideRouteAlternatives: false,
       waypoints:waypoints
-
   };
+
+  var polyline = new google.maps.Polyline({
+    path: [],
+    strokeColor: '#FF0000',
+    strokeWeight: 3
+    });
 
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
-      console.log(response);
-      directionsDisplay.setDirections(response);
+ //     console.log(response);
+ //     directionsDisplay.setDirections(response);
       document.getElementById('reset_button').style.visibility="visible";
       places['source'].marker.setMap(null);
       places['destination'].marker.setMap(null);
-      route_response=response;
-    // inserttodb(response);
+      for(m in waymarkers)
+        waymarkers[m].setMap(null);
+    
+
+      var legs = response.routes[0].legs;
+      for (i=0;i<legs.length;i++) {
+        var steps = legs[i].steps;
+        for (j=0;j<steps.length;j++) {
+          var nextSegment = steps[j].path;
+          for (k=0;k<nextSegment.length;k++) {
+            polyline.getPath().push(nextSegment[k]);
+          }
+        }
+      }
+      polyline.setMap(map);
+      latlngarray=polyline.getPath().getArray();
+      jsondat={shape_id:1,cordinates:[]};
+      for(var i=0;i<latlngarray.length;i++){
+        //console.log(latlngarray[i].lat());r
+        jsondat.cordinates.push({shape_pt_lon:latlngarray[i].lng(),shape_pt_lat:latlngarray[i].lat(),shape_pt_sequence:i+1});
+      }
+
+    //  inserttodb(jsondat);
+ //     jsondat=JSON.stringify(jsondat);
+      console.log(jsondat);
+     
     }
   });
+
 }
 
 /* Upto 8 wavepoints are added for each wavepoint a new autocomplete input field is created*/
@@ -163,64 +215,31 @@ function addwaypoint(elem){
 }
 
 
-/* Stops are added into maps by searching in autocomplete field*/
-function addstops(elem){
-  var input = document.getElementById(elem.id);
-  var autocomplete = new google.maps.places.Autocomplete(input);
-  autocomplete.bindTo('bounds', map);
 
-
-  var marker = new google.maps.Marker({
-    map:map,
-    draggable:true,
-    animation: google.maps.Animation.DROP
-  });
-
-  google.maps.event.addListener(autocomplete, 'place_changed', function() {
-    var place = autocomplete.getPlace();
-    console.log(place);
-    document.getElementById('stop_details').style.display = "block";
-    marker.setVisible(false);
-    if (!place.geometry)
-      return;
-    
-
-    if (place.geometry.viewport) 
-      map.fitBounds(place.geometry.viewport);
-
-    marker.setPosition(place.geometry.location);
-    marker.setVisible(true);
-    document.getElementById('reset_button').style.visibility="visible";
-    });
-    input.value="";
-    input.placeholder="Add stops";
-   
-}
 
 /* Resets the markers and Wave Points*/
 function reset_route(){
   directionsDisplay.setMap(null);
-  if(polyline_dynamic)
-      polyline_dynamic.setMap(null);
   places={};
   waypoints=[];
   for(var i=0; i<markers.length; i++)
     markers[i].setMap(null);
   markers=[];
+  waymarkers=[];
   document.getElementById("reset_button").style.visibility="hidden";
-  document.getElementById('stop_details').style.display = "none"; 
+  document.getElementById("form").reset();
   map.setCenter(pos);
   map.setZoom(10);
 }
 
 
 /* Overview_polyline is inserted into databse along with route Id*/
-function inserttodb(response){
+function inserttodb(jsondata){
     
     $.ajax({
       type: 'POST',
       url: 'http://192.168.0.175:1337/shapes/create',
-      data: {shape_id:'20',route:response.routes[0].overview_polyline},
+      data: jsondata,
       dataType: 'json',
       success: function(data) { 
         alert('Route Created Sucessfully '); 
@@ -235,35 +254,29 @@ function loadroute(){
   $.ajax({
       type: 'POST',
       url: 'http://192.168.0.175:1337/shapes/findbyid',
-      data: {id:20},
+      data: {id:7},
       dataType: 'json',
       success: function(data) { 
+
+       console.log(data);
        
-        console.log(data);
+      /*  console.log(data);
         var decpoly = google.maps.geometry.encoding.decodePath(data.route);
         console.log(decpoly);
-        polyline_dynamic = new google.maps.Polyline({map:map,path:decpoly,polyline_style:2}); 
-         document.getElementById('reset_button').style.visibility="visible";
-        // and this is where we actually draw it. 
-      
+        var polyline= new google.maps.Polyline({map:map,path:decpoly}); 
+        console.log(data); */
+
+
       },
       error: function() { alert('something bad happened'); }
     });
     
 }
 
-function addstop()
-{
-    var id=document.getElementById('stop_id');
-    var time=document.getElementById('stop_time');
-    var desc=document.getElementById('stop_desc');
-//    stops[stop_id++] = {stopid:id,time:time,desc:desc,name:}
-
-
-
-}
-
-function submit_route()
-{
-
+function gettime(){
+  
+  console.log(document.getElementById('stop_time').value);
+  stops[markerid].time=document.getElementById('stop_time').value;
+  console.log(stops);
+  document.getElementById('stop_details').style.visibility='hidden';
 }

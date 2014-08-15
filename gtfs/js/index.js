@@ -7,6 +7,8 @@ var uid;
 var markersarr = {};
 var vehicles = {};
 var vehicle_id= -1;
+var socket;
+
 
 var app = angular.module('details',['ui.bootstrap']);
 app.controller('DetailsController',function($scope,$log)
@@ -19,16 +21,15 @@ app.controller('DetailsController',function($scope,$log)
    };
  });
 
-
-
+var map_style =[{"featureType":"landscape","stylers":[{"hue":"#F1FF00"},{"saturation":-27.4},{"lightness":9.4},{"gamma":1}]},{"featureType":"road.highway","stylers":[{"hue":"#0099FF"},{"saturation":-20},{"lightness":36.4},{"gamma":1}]},{"featureType":"road.arterial","stylers":[{"hue":"#00FF4F"},{"saturation":0},{"lightness":0},{"gamma":1}]},{"featureType":"road.local","stylers":[{"hue":"#FFB300"},{"saturation":-38},{"lightness":11.2},{"gamma":1}]},{"featureType":"water","stylers":[{"hue":"#00B6FF"},{"saturation":4.2},{"lightness":-63.4},{"gamma":1}]},{"featureType":"poi","stylers":[{"hue":"#9FFF00"},{"saturation":0},{"lightness":0},{"gamma":1}]}];
 
 function init()
 {
 
-	var socket = io.connect('http://localhost:3000/');
+	socket = io.connect('http://localhost:3000');
 
 	socket.on('connect', function(data){
-	    socket.emit('subscribe', {channel:'realtime'});
+	    //socket.emit('subscribe', {channel:'realtime'});
     });
 
     socket.on('reconnecting', function(data){
@@ -37,7 +38,8 @@ function init()
     socket.on('realtime', function (data) {
     		console.log(data);
    	 		updatevehicle(data);
-   		angular.element("#hideclick").scope().updateFn(data.det);
+   		 	if(data.det.trip_id==vehicle_id)
+		  		angular.element("#hideclick").scope().updateFn(data.det);
  
     });
 
@@ -56,7 +58,11 @@ function createmap()
 	var myOptions = {
 			center : new google.maps.LatLng(8.4875,76.9525),
 			zoom : 12,
-			mapTypeId : google.maps.MapTypeId.ROADMAP
+			mapTypeId : google.maps.MapTypeId.ROADMAP,
+			streetViewControl: false,
+			mapTypeControl: false,
+			panControl: false
+//			styles:map_style
 		};
 	map = new google.maps.Map(map_canvas, myOptions);
 	infowindow = new google.maps.InfoWindow({
@@ -68,16 +74,18 @@ function createmap()
 function updatevehicle(data)
 {
 	var point = new google.maps.LatLng(data.position.lat, data.position.lng);
-	uid = data.trip_id;
+	uid = data.det.trip_id;
 	if(!(uid in markersarr))
 		vehicles[uid] = createvehicle(data,point);
 	else
 	{
 		vehicles[uid].contentinfo = data.emp;
-		markersarr[uid].animateTo(point,{ 
+		markersarr[uid].animateTo(point,{  
 			easing : "linear",
 			duration : 1000,
-			complete : function(){}
+			complete : function(){
+
+			}
 		});
 	}
 	path = vehicles[uid].polyline.getPath();
@@ -95,12 +103,12 @@ function createvehicle(data,point)
 			icon : image
 		});
 
-	newmarker.setTitle(toString(uid));
+	newmarker.setTitle(uid);
 	markersarr[uid]=newmarker;
   	google.maps.event.addListener(markersarr[uid], 'click', function() {
-  		showroute(this);
-  		vehicle_id=this.id;
-  	 document.getElementById('hideclick').style.display = "block";
+  	   	vehicle_id=this.id;
+  		socket.emit('click',vehicle_id);
+     	 document.getElementById('hideclick').style.display = "block";
   	});
   	
   	var routelayer = new google.maps.KmlLayer({
@@ -112,9 +120,9 @@ function createvehicle(data,point)
 		    strokeColor: '#428CCC',
 		    strokeOpacity: 1.0,
 		    strokeWeight: 3
-			  };
+			  };	
 		  poly = new google.maps.Polyline(polyOptions);
-		  poly.setMap(map);
+ 		  poly.setMap(map);
 
  	return {
 		uid : uid,
@@ -129,7 +137,8 @@ function createvehicle(data,point)
 
 }
 
-function showroute(data)
+
+function close_details()
 {
-	
+	  document.getElementById("hideclick").style.display="none"; 
 }

@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=500">
 <link href="css/reset.css" rel="stylesheet" type="text/css" />
 <link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>  
@@ -14,53 +15,10 @@
 <script type="text/javascript" src="js/ui-bootstrap-tpls-0.11.0.min.js"></script>
 <script type="text/javascript" src="js/jquery_easing.js"></script>
 <script type="text/javascript" src="js/markerAnimate.js"></script>
-<script type="text/javascript" src="index2.js"></script>
- 
-<style type="text/css">
-@import url(http://fonts.googleapis.com/css?family=Droid+Sans);
-   #map_canvas
-   {
-       height: 88%;
-   }
-  #autocomplete
-  {
-     width: 25%;
-  }
- td{
-     text-align: center;
-     width:10%;
-  }
-  .stop_visited 
-  {
-      color: #3c763d;
-      background-color: #dff0d8;
-      border-color: #d6e9c6;
-  }
-   .stop_remaining
-  {
-      color: #a94442;
-      background-color: #f2dede;
-      border-color: #ebccd1;
-  }
-  .tablestyle
-  {
-    margin-bottom:0px;
-  }
-  .panel_head_style
-  {
-    text-align: center;
-  }
-  .thead_style
-  {
-      color: #2c3e50;
-      background-color:#ecf0f1;
-      border-color: #95a5a6;
-  }
- 
-</style>
+<script type="text/javascript" src="js/index.js"></script>
+<link rel="stylesheet" type="text/css" href="css/component.css" />
 
-
-<link href="index.css" rel="stylesheet" type="text/css" />
+<link href="css/index.css" rel="stylesheet" type="text/css" />
 </head>
 <body onload="init()">
  <div class="col-md-12 header">
@@ -69,9 +27,10 @@
         <div id="map_canvas" class="col-md-12"></div>
 
 <div id="hideclick" class="panel panel-info " ng-controller="DetailsController" style="margin-right:10px;width:270px">
-           <div  id="app-angular" class="panel-heading panel_head_style">Trip Id : {{empList.trip_id}}
+          <div  id="app-angular" class="panel-heading panel_head_style">Trip Id : {{empList.trip_id}}
+          <button class="close" onclick="close_details()">×</button>
            </div>
-             <tabset justified="true">
+             <tabset justified="true" class="tab_style">
                 <tab heading="Vehicle Status">
                   <table class="table tablestyle" style="table-layout:fixed;border:3px">        
                                 <thead class="thead_style">
@@ -100,20 +59,19 @@
                     </div>
                 </tab>
 
-                <tab heading="Employee Details">
-                 <div>
-                    employee : 
-                            <ul>
-                            <li ng-repeat ="person in empList.emp"> {{person}}</li>
-                            </ul>
-                    </div>  
+                <tab heading="Employees">
+                 <div style="overflow-y:auto;height:300px">
+                    <table class="table tablestyle" style="table-layout:fixed">    
+                                  <tbody >
+                                        <tr ng-repeat ="person in empList.emp" class="emp_list" >
+                                        <td style="text-align: left">{{person}}</td>
+                                  </tbody>
+                      </table>
+                 </div>
                 </tab>
       
-            </tabset>
+            </tabset>                 
                     
-            
-                              
-            
   </div>
 
    </body>
