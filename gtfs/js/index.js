@@ -7,8 +7,12 @@ var uid;
 var markersarr = {};
 var vehicles = {};
 var vehicle_id= -1;
+<<<<<<< HEAD:gtfs/js/index.js
 var socket;
 
+=======
+var vehicle_selected;
+>>>>>>> 21321ded52b2c028251037dae48ed7db67d373fc:gtfs/index2.js
 
 var app = angular.module('details',['ui.bootstrap']);
 app.controller('DetailsController',function($scope,$log)
@@ -29,18 +33,29 @@ function init()
 	socket = io.connect('http://localhost:3000');
 
 	socket.on('connect', function(data){
+<<<<<<< HEAD:gtfs/js/index.js
 	    //socket.emit('subscribe', {channel:'realtime'});
     });
+=======
+		console.log('web socket connected');
+	});
+>>>>>>> 21321ded52b2c028251037dae48ed7db67d373fc:gtfs/index2.js
 
     socket.on('reconnecting', function(data){
     });
 
     socket.on('realtime', function (data) {
+<<<<<<< HEAD:gtfs/js/index.js
     		console.log(data);
    	 		updatevehicle(data);
    		 	if(data.det.trip_id==vehicle_id)
 		  		angular.element("#hideclick").scope().updateFn(data.det);
  
+=======
+    	console.log(data);
+   	 	updatevehicle(data);
+   		angular.element("#hideclick").scope().updateFn(data.det);
+>>>>>>> 21321ded52b2c028251037dae48ed7db67d373fc:gtfs/index2.js
     });
 
     createmap();
@@ -65,9 +80,6 @@ function createmap()
 //			styles:map_style
 		};
 	map = new google.maps.Map(map_canvas, myOptions);
-	infowindow = new google.maps.InfoWindow({
-             content: 'holding...'
-        });	
 
 }
 
@@ -106,6 +118,7 @@ function createvehicle(data,point)
 	newmarker.setTitle(uid);
 	markersarr[uid]=newmarker;
   	google.maps.event.addListener(markersarr[uid], 'click', function() {
+<<<<<<< HEAD:gtfs/js/index.js
   	   	vehicle_id=this.id;
   		socket.emit('click',vehicle_id);
      	 document.getElementById('hideclick').style.display = "block";
@@ -123,17 +136,27 @@ function createvehicle(data,point)
 			  };	
 		  poly = new google.maps.Polyline(polyOptions);
  		  poly.setMap(map);
+=======
+  		socket.emit('click',this.id);			//send the trip id through socket
+  		vehicle_selected=this.id;				//set the trip id of selected vehicle
+  	 document.getElementById('hideclick').style.display = "block";
+  	});
+  	
+  	var polyOptions = {
+		strokeColor: '#428CCC',
+		strokeOpacity: 1.0,
+		strokeWeight: 3
+	};
+	poly = new google.maps.Polyline(polyOptions);
+	poly.setMap(map);
+>>>>>>> 21321ded52b2c028251037dae48ed7db67d373fc:gtfs/index2.js
 
  	return {
 		uid : uid,
 		marker : newmarker,
-		route : routelayer,
-		contentinfo : data.emp,
-		headingTo : uid,
 		polyline:poly
-
-
 	}
+<<<<<<< HEAD:gtfs/js/index.js
 
 }
 
@@ -142,3 +165,6 @@ function close_details()
 {
 	  document.getElementById("hideclick").style.display="none"; 
 }
+=======
+}
+>>>>>>> 21321ded52b2c028251037dae48ed7db67d373fc:gtfs/index2.js
