@@ -1,4 +1,5 @@
 # KSRTC-
 Realtime analytics - buses
 
-Project Contributors: @nprajilesh , @pranavrajs , @rohanreji93 , @adps94
+Main Contributor: @avinayak
+Sub Contributors: @nprajilesh , @pranavrajs , @rohanreji93 , @adps94
